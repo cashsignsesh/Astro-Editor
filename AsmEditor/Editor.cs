@@ -60,9 +60,17 @@ namespace AsmEditor {
 			this.projectNode.ImageIndex=5;
 			ToolStrip ts = new ToolStrip();
 			
-			ToolStripDropDownButton tsdb = new ToolStripDropDownButton("File",null,null,"File");
+			ToolStripDropDownButton tdsb = new ToolStripDropDownButton () { Name="File",Text="File"} ;
+			ToolStripDropDownButton tdsb0 = new ToolStripDropDownButton () { Name="Edit",Text="Edit"} ;
+			ToolStripDropDownButton tdsb1 = new ToolStripDropDownButton () { Name="Project",Text="Project"} ;
+			ToolStripDropDownButton tdsb2 = new ToolStripDropDownButton () { Name="Search",Text="Search"} ;
 			
-			ts.Items.AddRange(new [] { tsdb });
+			tdsb.DropDown=fileContextMenuStrip;
+			tdsb0.DropDown=editContextMenuStrip;
+			tdsb1.DropDown=projectContextMenuStrip;
+			tdsb2.DropDown=searchContextMenuStrip;
+			
+			ts.Items.AddRange(new [] { tdsb,tdsb0,tdsb1,tdsb2 });
 			
 			ts.Dock = DockStyle.Top;
 			
@@ -84,6 +92,7 @@ namespace AsmEditor {
 			//TabPages, right click and close this file, close all files but this, close all files
 			//TODO:: Finish contextmenustrip/toolstrip work
 			//TODO:: Syntax highlighting
+			//TODO:: (in paint probably) resizing controls accordingly when form resized
 			this.BringToFront();
 			
 		}

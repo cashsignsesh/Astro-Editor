@@ -50,31 +50,33 @@ namespace AsmEditor
 			this.errorsLabel = new System.Windows.Forms.Label();
 			this.fileTabs = new System.Windows.Forms.TabControl();
 			this.defaultTabPage = new System.Windows.Forms.TabPage();
-			this.mainContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.openProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.closeProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.saveFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.undoCtrlZToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.redoCtrlYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.createFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.assemblyFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.batchFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.addReferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.compileDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.replaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.fileContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.editContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.projectContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.searchContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.newProjectToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.openProjectToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.closeProjectToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.saveFileCtrlSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.saveProjectCtrlShiftSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.undoCtrlZToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.redoCtrlYToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.createFileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.assemblyFileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.batchFileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.addResourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.compileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.debugF5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.findToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.replaceToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.mainTabs.SuspendLayout();
 			this.projectTabPage.SuspendLayout();
 			this.errorsPanel.SuspendLayout();
 			this.fileTabs.SuspendLayout();
-			this.mainContextMenuStrip.SuspendLayout();
+			this.fileContextMenuStrip.SuspendLayout();
+			this.editContextMenuStrip.SuspendLayout();
+			this.projectContextMenuStrip.SuspendLayout();
+			this.searchContextMenuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainTabs
@@ -110,7 +112,7 @@ namespace AsmEditor
 			this.settingsTabPage.Location = new System.Drawing.Point(4, 22);
 			this.settingsTabPage.Name = "settingsTabPage";
 			this.settingsTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.settingsTabPage.Size = new System.Drawing.Size(376, 489);
+			this.settingsTabPage.Size = new System.Drawing.Size(376, 480);
 			this.settingsTabPage.TabIndex = 1;
 			this.settingsTabPage.Text = "Settings";
 			this.settingsTabPage.UseVisualStyleBackColor = true;
@@ -192,149 +194,135 @@ namespace AsmEditor
 			this.defaultTabPage.TabIndex = 1;
 			this.defaultTabPage.UseVisualStyleBackColor = true;
 			// 
-			// mainContextMenuStrip
+			// fileContextMenuStrip
 			// 
-			this.mainContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.fileToolStripMenuItem,
-									this.editToolStripMenuItem,
-									this.projectToolStripMenuItem,
-									this.searchToolStripMenuItem});
-			this.mainContextMenuStrip.Name = "contextMenuStrip1";
-			this.mainContextMenuStrip.Size = new System.Drawing.Size(112, 92);
+			this.fileContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.newProjectToolStripMenuItem1,
+									this.openProjectToolStripMenuItem1,
+									this.closeProjectToolStripMenuItem1,
+									this.saveFileCtrlSToolStripMenuItem,
+									this.saveProjectCtrlShiftSToolStripMenuItem});
+			this.fileContextMenuStrip.Name = "fileContextMenuStrip";
+			this.fileContextMenuStrip.Size = new System.Drawing.Size(192, 114);
 			// 
-			// fileToolStripMenuItem
+			// editContextMenuStrip
 			// 
-			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.newProjectToolStripMenuItem,
-									this.openProjectToolStripMenuItem,
-									this.closeProjectToolStripMenuItem,
-									this.saveFileToolStripMenuItem,
-									this.saveAllToolStripMenuItem});
-			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-			this.fileToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
-			this.fileToolStripMenuItem.Text = "File";
+			this.editContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.undoCtrlZToolStripMenuItem1,
+									this.redoCtrlYToolStripMenuItem1});
+			this.editContextMenuStrip.Name = "editContextMenuStrip";
+			this.editContextMenuStrip.Size = new System.Drawing.Size(149, 48);
 			// 
-			// newProjectToolStripMenuItem
+			// projectContextMenuStrip
 			// 
-			this.newProjectToolStripMenuItem.Name = "newProjectToolStripMenuItem";
-			this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-			this.newProjectToolStripMenuItem.Text = "New Project";
+			this.projectContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.createFileToolStripMenuItem1,
+									this.addResourceToolStripMenuItem,
+									this.compileToolStripMenuItem1,
+									this.debugF5ToolStripMenuItem});
+			this.projectContextMenuStrip.Name = "projectContextMenuStrip";
+			this.projectContextMenuStrip.Size = new System.Drawing.Size(145, 92);
 			// 
-			// openProjectToolStripMenuItem
+			// searchContextMenuStrip
 			// 
-			this.openProjectToolStripMenuItem.Name = "openProjectToolStripMenuItem";
-			this.openProjectToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-			this.openProjectToolStripMenuItem.Text = "Open Project";
+			this.searchContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.findToolStripMenuItem1,
+									this.replaceToolStripMenuItem1});
+			this.searchContextMenuStrip.Name = "contextMenuStrip4";
+			this.searchContextMenuStrip.Size = new System.Drawing.Size(116, 48);
 			// 
-			// closeProjectToolStripMenuItem
+			// newProjectToolStripMenuItem1
 			// 
-			this.closeProjectToolStripMenuItem.Name = "closeProjectToolStripMenuItem";
-			this.closeProjectToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-			this.closeProjectToolStripMenuItem.Text = "Close Project";
+			this.newProjectToolStripMenuItem1.Name = "newProjectToolStripMenuItem1";
+			this.newProjectToolStripMenuItem1.Size = new System.Drawing.Size(191, 22);
+			this.newProjectToolStripMenuItem1.Text = "New Project";
 			// 
-			// saveFileToolStripMenuItem
+			// openProjectToolStripMenuItem1
 			// 
-			this.saveFileToolStripMenuItem.Name = "saveFileToolStripMenuItem";
-			this.saveFileToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-			this.saveFileToolStripMenuItem.Text = "Save File (Ctrl+S)";
+			this.openProjectToolStripMenuItem1.Name = "openProjectToolStripMenuItem1";
+			this.openProjectToolStripMenuItem1.Size = new System.Drawing.Size(191, 22);
+			this.openProjectToolStripMenuItem1.Text = "Open Project";
 			// 
-			// saveAllToolStripMenuItem
+			// closeProjectToolStripMenuItem1
 			// 
-			this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
-			this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-			this.saveAllToolStripMenuItem.Text = "Save All (Ctrl+Shift+S)";
+			this.closeProjectToolStripMenuItem1.Name = "closeProjectToolStripMenuItem1";
+			this.closeProjectToolStripMenuItem1.Size = new System.Drawing.Size(191, 22);
+			this.closeProjectToolStripMenuItem1.Text = "Close Project";
 			// 
-			// editToolStripMenuItem
+			// saveFileCtrlSToolStripMenuItem
 			// 
-			this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.undoCtrlZToolStripMenuItem,
-									this.redoCtrlYToolStripMenuItem});
-			this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-			this.editToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
-			this.editToolStripMenuItem.Text = "Edit";
+			this.saveFileCtrlSToolStripMenuItem.Name = "saveFileCtrlSToolStripMenuItem";
+			this.saveFileCtrlSToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.saveFileCtrlSToolStripMenuItem.Text = "Save File (Ctrl+S)";
 			// 
-			// undoCtrlZToolStripMenuItem
+			// saveProjectCtrlShiftSToolStripMenuItem
 			// 
-			this.undoCtrlZToolStripMenuItem.Name = "undoCtrlZToolStripMenuItem";
-			this.undoCtrlZToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-			this.undoCtrlZToolStripMenuItem.Text = "Undo (Ctrl+Z)";
+			this.saveProjectCtrlShiftSToolStripMenuItem.Name = "saveProjectCtrlShiftSToolStripMenuItem";
+			this.saveProjectCtrlShiftSToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.saveProjectCtrlShiftSToolStripMenuItem.Text = "Save All (Ctrl+Shift+S)";
 			// 
-			// redoCtrlYToolStripMenuItem
+			// undoCtrlZToolStripMenuItem1
 			// 
-			this.redoCtrlYToolStripMenuItem.Name = "redoCtrlYToolStripMenuItem";
-			this.redoCtrlYToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-			this.redoCtrlYToolStripMenuItem.Text = "Redo (Ctrl+Y)";
+			this.undoCtrlZToolStripMenuItem1.Name = "undoCtrlZToolStripMenuItem1";
+			this.undoCtrlZToolStripMenuItem1.Size = new System.Drawing.Size(148, 22);
+			this.undoCtrlZToolStripMenuItem1.Text = "Undo (Ctrl+Z)";
 			// 
-			// projectToolStripMenuItem
+			// redoCtrlYToolStripMenuItem1
 			// 
-			this.projectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.createFileToolStripMenuItem,
-									this.addReferenceToolStripMenuItem,
-									this.compileToolStripMenuItem,
-									this.compileDebugToolStripMenuItem});
-			this.projectToolStripMenuItem.Name = "projectToolStripMenuItem";
-			this.projectToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
-			this.projectToolStripMenuItem.Text = "Project";
+			this.redoCtrlYToolStripMenuItem1.Name = "redoCtrlYToolStripMenuItem1";
+			this.redoCtrlYToolStripMenuItem1.Size = new System.Drawing.Size(148, 22);
+			this.redoCtrlYToolStripMenuItem1.Text = "Redo (Ctrl+Y)";
 			// 
-			// createFileToolStripMenuItem
+			// createFileToolStripMenuItem1
 			// 
-			this.createFileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.assemblyFileToolStripMenuItem,
-									this.batchFileToolStripMenuItem});
-			this.createFileToolStripMenuItem.Name = "createFileToolStripMenuItem";
-			this.createFileToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-			this.createFileToolStripMenuItem.Text = "Create file";
+			this.createFileToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.assemblyFileToolStripMenuItem1,
+									this.batchFileToolStripMenuItem1});
+			this.createFileToolStripMenuItem1.Name = "createFileToolStripMenuItem1";
+			this.createFileToolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
+			this.createFileToolStripMenuItem1.Text = "Create file";
 			// 
-			// assemblyFileToolStripMenuItem
+			// assemblyFileToolStripMenuItem1
 			// 
-			this.assemblyFileToolStripMenuItem.Name = "assemblyFileToolStripMenuItem";
-			this.assemblyFileToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-			this.assemblyFileToolStripMenuItem.Text = "Assembly file";
+			this.assemblyFileToolStripMenuItem1.Name = "assemblyFileToolStripMenuItem1";
+			this.assemblyFileToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+			this.assemblyFileToolStripMenuItem1.Text = "Assembly file";
 			// 
-			// batchFileToolStripMenuItem
+			// batchFileToolStripMenuItem1
 			// 
-			this.batchFileToolStripMenuItem.Name = "batchFileToolStripMenuItem";
-			this.batchFileToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-			this.batchFileToolStripMenuItem.Text = "Batch file";
+			this.batchFileToolStripMenuItem1.Name = "batchFileToolStripMenuItem1";
+			this.batchFileToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+			this.batchFileToolStripMenuItem1.Text = "Batch file";
 			// 
-			// addReferenceToolStripMenuItem
+			// addResourceToolStripMenuItem
 			// 
-			this.addReferenceToolStripMenuItem.Name = "addReferenceToolStripMenuItem";
-			this.addReferenceToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-			this.addReferenceToolStripMenuItem.Text = "Add resource";
+			this.addResourceToolStripMenuItem.Name = "addResourceToolStripMenuItem";
+			this.addResourceToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+			this.addResourceToolStripMenuItem.Text = "Add resource";
 			// 
-			// compileToolStripMenuItem
+			// compileToolStripMenuItem1
 			// 
-			this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
-			this.compileToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-			this.compileToolStripMenuItem.Text = "Compile";
+			this.compileToolStripMenuItem1.Name = "compileToolStripMenuItem1";
+			this.compileToolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
+			this.compileToolStripMenuItem1.Text = "Compile";
 			// 
-			// compileDebugToolStripMenuItem
+			// debugF5ToolStripMenuItem
 			// 
-			this.compileDebugToolStripMenuItem.Name = "compileDebugToolStripMenuItem";
-			this.compileDebugToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-			this.compileDebugToolStripMenuItem.Text = "Debug";
+			this.debugF5ToolStripMenuItem.Name = "debugF5ToolStripMenuItem";
+			this.debugF5ToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+			this.debugF5ToolStripMenuItem.Text = "Debug (F5)";
 			// 
-			// searchToolStripMenuItem
+			// findToolStripMenuItem1
 			// 
-			this.searchToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.findToolStripMenuItem,
-									this.replaceToolStripMenuItem});
-			this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-			this.searchToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
-			this.searchToolStripMenuItem.Text = "Search";
+			this.findToolStripMenuItem1.Name = "findToolStripMenuItem1";
+			this.findToolStripMenuItem1.Size = new System.Drawing.Size(115, 22);
+			this.findToolStripMenuItem1.Text = "Find";
 			// 
-			// findToolStripMenuItem
+			// replaceToolStripMenuItem1
 			// 
-			this.findToolStripMenuItem.Name = "findToolStripMenuItem";
-			this.findToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
-			this.findToolStripMenuItem.Text = "Find";
-			// 
-			// replaceToolStripMenuItem
-			// 
-			this.replaceToolStripMenuItem.Name = "replaceToolStripMenuItem";
-			this.replaceToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
-			this.replaceToolStripMenuItem.Text = "Replace";
+			this.replaceToolStripMenuItem1.Name = "replaceToolStripMenuItem1";
+			this.replaceToolStripMenuItem1.Size = new System.Drawing.Size(115, 22);
+			this.replaceToolStripMenuItem1.Text = "Replace";
 			// 
 			// Editor
 			// 
@@ -353,33 +341,35 @@ namespace AsmEditor
 			this.projectTabPage.ResumeLayout(false);
 			this.errorsPanel.ResumeLayout(false);
 			this.fileTabs.ResumeLayout(false);
-			this.mainContextMenuStrip.ResumeLayout(false);
+			this.fileContextMenuStrip.ResumeLayout(false);
+			this.editContextMenuStrip.ResumeLayout(false);
+			this.projectContextMenuStrip.ResumeLayout(false);
+			this.searchContextMenuStrip.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.ToolStripMenuItem replaceToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem findToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem debugF5ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem compileToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem addResourceToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem batchFileToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem assemblyFileToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem createFileToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem redoCtrlYToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem undoCtrlZToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem saveProjectCtrlShiftSToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem saveFileCtrlSToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem closeProjectToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem openProjectToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem newProjectToolStripMenuItem1;
+		private System.Windows.Forms.ContextMenuStrip searchContextMenuStrip;
+		private System.Windows.Forms.ContextMenuStrip projectContextMenuStrip;
+		private System.Windows.Forms.ContextMenuStrip editContextMenuStrip;
+		private System.Windows.Forms.ContextMenuStrip fileContextMenuStrip;
 		private System.Windows.Forms.RichTextBox projectErrors;
 		private System.Windows.Forms.RichTextBox editorErrors;
 		private System.Windows.Forms.Button clearEditorErrorsBtn;
 		private System.Windows.Forms.Button clearProjectErrorsBtn;
-		private System.Windows.Forms.ToolStripMenuItem replaceToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem findToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem compileDebugToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem compileToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem addReferenceToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem batchFileToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem assemblyFileToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem createFileToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem projectToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem redoCtrlYToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem undoCtrlZToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem closeProjectToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem newProjectToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem saveAllToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem saveFileToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem openProjectToolStripMenuItem;
-		private System.Windows.Forms.ContextMenuStrip mainContextMenuStrip;
 		private System.Windows.Forms.TabPage defaultTabPage;
 		private System.Windows.Forms.TabControl fileTabs;
 		private System.Windows.Forms.Label errorsLabel;
