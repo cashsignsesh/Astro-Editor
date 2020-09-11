@@ -71,7 +71,7 @@ namespace AsmEditor {
 			if (!(File.Exists(MainForm.recentsFile))) {
 				
 				Byte[] data = Encoding.UTF8.GetBytes(@"'The DateTime's here are listed in UTC (for speed&timezone change compatibility).
-'If you are looking for accurate numbers for whatever reason, convert from UTC to your timezone.");
+'If you are looking for accurate numbers for whatever reason, convert from UTC to your timezone.\n");
 				using (FileStream fs = File.Create(MainForm.recentsFile))
 					fs.Write(data,0,data.Length);
 				

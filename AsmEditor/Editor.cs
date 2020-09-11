@@ -13,6 +13,7 @@ using System.IO;
 using AsmEditor.Projects;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace AsmEditor {
 	
@@ -58,6 +59,8 @@ namespace AsmEditor {
 			this.projectTreeView.ImageList = imageList;
 			this.projectNode = this.projectTreeView.Nodes.Add(this.header.pName);
 			this.projectNode.ImageIndex=5;
+			this.projectNode.SelectedImageIndex=5;
+			this.projectNode.Name = this.projectPath;
 			ToolStrip ts = new ToolStrip();
 			
 			ToolStripDropDownButton tdsb = new ToolStripDropDownButton () { Name="File",Text="File"} ;
@@ -85,7 +88,6 @@ namespace AsmEditor {
 			
 			this.projectTabPage.AutoScroll = true;
 			this.loadProjectTreeView();
-			//TODO:: dock a contextmenustrip to top of form
 			//Add resources functionality into ae project, drop it into bin @ runtime or smth
 			//Modify defP- settings by right clicking on project from viewer
 			//Open from explorer on right click
@@ -93,19 +95,33 @@ namespace AsmEditor {
 			//TODO:: Finish contextmenustrip/toolstrip work
 			//TODO:: Syntax highlighting
 			//TODO:: (in paint probably) resizing controls accordingly when form resized
+			//TODO:: AsmEditor exception handler (Rtb on this form)
 			this.BringToFront();
 			
 		}
 		
 		private void loadTabPage (String fn) {
 			
-			this.fileTabs.TabPages.Add(Path.GetFileName(fn));
+			String str = Path.GetFileName(fn);
 			
-		}
-		
-		private TreeNode addTreeNode (String fn) {
-			
-			return null;
+			if (!(this.fileTabs.TabPages.Cast<TabPage>().Select(x=>x.Text).Contains(str))) {
+				
+				TabPage tc = new TabPage (str);
+				this.fileTabs.TabPages.Add(tc);
+				tc.Controls.Add(new RichTextBox () {
+				                	
+				                	Size=new Size(tc.Size.Width-2,tc.Size.Height-2),
+				                	Location=new Point(1,1),
+				                	Text=File.ReadAllText(fn)
+				                	
+				                });
+				
+				RichTextBox c = tc.Controls.Cast<Control>().Where(x=>x.GetType()==typeof(RichTextBox)).First() as RichTextBox;
+				
+				c.KeyDown+=this.highlightSyntax;
+				this.highlightSyntax(c,null);
+				
+			}
 			
 		}
 		
@@ -124,22 +140,71 @@ namespace AsmEditor {
 		
 		private void loadProjectTreeView () {
 			
-			this.projectNode.Nodes.AddRange(this.getNodesFromPath(this.projectPathDir+'\\'+this.header.pSrcDir,this.projectNode).ToArray());
+			this.projectNode.Nodes.AddRange(this.getNodesFromPath(this.projectPathDir+'\\'+this.header.pSrcDir,this.projectNode).Select(x=>{x.SelectedImageIndex=x.ImageIndex; return x;}).ToArray());
 			this.projectNode.Expand();
-			
-			//this.projectNode.Nodes.Add
 			
 		}
 		
 		private IEnumerable<TreeNode> getNodesFromPath (String path,TreeNode parent) {
 			
-			Int32 projectPathDirSrcLength = this.projectPathDir.Length;
-			
-			foreach (String s in Directory.GetDirectories(path).Select(x=>x.Remove(0,projectPathDirSrcLength)).Where(x=>x.Substring(1)!=this.header.pBinDir))
+			foreach (String s in Directory.GetDirectories(path).Select(x=>x.Remove(0,this.projectPathDir.Length)).Where(x=>x.Substring(1)!=this.header.pBinDir))
 				yield return new TreeNode(){Name=s,ImageIndex=0,Text=(s.Contains(@"\"))?s.Split('\\').Last():s};
 			
 			foreach (String s in Directory.GetFiles(path))
-				yield return new TreeNode(){Name=s.Remove(0,projectPathDirSrcLength),ImageIndex=(s.EndsWith(".asm"))?1:(s.EndsWith(".bat"))?2:4,Text=(s.Contains(@"\"))?s.Split('\\').Last():s};
+				yield return new TreeNode(){Name=s,ImageIndex=(s.EndsWith(".asm"))?1:(s.EndsWith(".bat"))?2:4,Text=(s.Contains(@"\"))?s.Split('\\').Last():s};
+			
+		}
+		
+		
+		private void ProjectTreeViewAfterSelect (Object sender,TreeViewEventArgs e) {
+			
+			String nodeName=e.Node.Name;
+			
+			if (!(File.Exists(nodeName)))
+				nodeName=this.projectPathDir+nodeName;
+			
+			if (!(File.Exists(nodeName)))
+				return;
+			
+			this.loadTabPage(nodeName);
+			
+		}
+		
+		private void highlightSyntax (Object o,EventArgs e) {
+			
+			//call this more efficiently,maybe after every space? line? etc
+			//maybe don't highlight already highlighted lines,etc.
+			
+			StringBuilder sb = new StringBuilder();
+			
+			RichTextBox rtb = (o as RichTextBox);
+			Int32 pos,i = 0;
+			Boolean inQuotes = false;
+			foreach (String s in rtb.Lines) {
+				
+				//rtb.Select(i,s.Length);
+				
+				pos = 0;
+				inQuotes = false;
+				foreach (Char c in s) {
+					
+					if (c==';') {
+						
+						rtb.Select((i+pos),(s.Length-i));
+						rtb.SelectionColor=Color.DimGray;
+						break;
+						
+					}
+						
+					
+					++pos;
+					
+				}
+				
+				i+=s.Length;
+				
+			}
+			rtb.DeselectAll();
 			
 		}
 		
