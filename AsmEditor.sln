@@ -1,0 +1,18 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+# SharpDevelop 4.4
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsmEditor", "AsmEditor\AsmEditor.csproj", "{EB30EFB1-84D4-4D51-95EA-31F4BB96DA12}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB30EFB1-84D4-4D51-95EA-31F4BB96DA12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB30EFB1-84D4-4D51-95EA-31F4BB96DA12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB30EFB1-84D4-4D51-95EA-31F4BB96DA12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB30EFB1-84D4-4D51-95EA-31F4BB96DA12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+EndGlobal
