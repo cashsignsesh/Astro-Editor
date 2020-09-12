@@ -109,7 +109,8 @@ namespace AsmEditor {
 				
 				TabPage tc = new TabPage (str);
 				this.fileTabs.TabPages.Add(tc);
-				
+				Scintilla s = null;
+				try{
 				tc.Controls.Add(new Scintilla () {
 				                	
 				                	Size=new Size(tc.Size.Width-2,tc.Size.Height-2),
@@ -118,8 +119,8 @@ namespace AsmEditor {
 				                	
 				                });
 				
-				Scintilla s = tc.Controls.Cast<Control>().Where(x=>x.GetType()==typeof(Scintilla)).First() as Scintilla;
-				
+				s = tc.Controls.Cast<Control>().Where(x=>x.GetType()==typeof(Scintilla)).First() as Scintilla;
+				}catch(Exception ex){MessageBox.Show(ex.ToString());}
 				s.StyleResetDefault();
 				s.Styles[Style.Default].Font="Consolas";
 				s.Styles[Style.Default].SizeF=13.5F;
@@ -134,11 +135,13 @@ namespace AsmEditor {
 					s.Styles[Style.Batch.Command].ForeColor=Color.Blue;
 					s.Styles[Style.Batch.Comment].ForeColor=Color.Green; 
 					s.Styles[Style.Batch.Identifier].ForeColor=Color.HotPink;
-					s.Styles[Style.Batch.Word].ForeColor=Color.Gray;
+					s.Styles[Style.Batch.Word].ForeColor=Color.Blue;
 					s.Styles[Style.Batch.Default].ForeColor=Color.Black;
 					s.Styles[Style.Batch.Label].ForeColor=Color.White;
 					s.Styles[Style.Batch.Label].BackColor=Color.Black;
 					s.Styles[Style.Batch.Operator].ForeColor=Color.Black;
+					
+					//TODO::keywords?
 					
 					s.Lexer=Lexer.Batch;
 					
@@ -146,7 +149,7 @@ namespace AsmEditor {
 				
 				else if (str.EndsWith(".asm")) {
 					
-					
+					s.Styles[Style.Asm.Comment].ForeColor=Color.Gray;
 					
 				}
 				
@@ -156,6 +159,8 @@ namespace AsmEditor {
 						s.Update();
 				
 				};
+				
+				s.TextChanged += delegate {  };
 				
 				this.fileTabs.SelectTab(tc);
 				
