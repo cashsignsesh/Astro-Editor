@@ -14,6 +14,7 @@ using AsmEditor.Projects;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ScintillaNET;
 
 namespace AsmEditor {
 	
@@ -108,7 +109,8 @@ namespace AsmEditor {
 				
 				TabPage tc = new TabPage (str);
 				this.fileTabs.TabPages.Add(tc);
-				tc.Controls.Add(new RichTextBox () {
+				
+				tc.Controls.Add(new Scintilla () {
 				                	
 				                	Size=new Size(tc.Size.Width-2,tc.Size.Height-2),
 				                	Location=new Point(1,1),
@@ -116,10 +118,46 @@ namespace AsmEditor {
 				                	
 				                });
 				
-				RichTextBox c = tc.Controls.Cast<Control>().Where(x=>x.GetType()==typeof(RichTextBox)).First() as RichTextBox;
+				Scintilla s = tc.Controls.Cast<Control>().Where(x=>x.GetType()==typeof(Scintilla)).First() as Scintilla;
 				
-				c.KeyDown+=this.highlightSyntax;
-				this.highlightSyntax(c,null);
+				s.StyleResetDefault();
+				s.Styles[Style.Default].Font="Consolas";
+				s.Styles[Style.Default].SizeF=13.5F;
+				s.StyleClearAll();
+				
+				s.WrapMode = WrapMode.None;
+				//TODO:: Add line count
+				
+								
+				if (str.EndsWith(".bat")) {
+					
+					s.Styles[Style.Batch.Command].ForeColor=Color.Blue;
+					s.Styles[Style.Batch.Comment].ForeColor=Color.Green; 
+					s.Styles[Style.Batch.Identifier].ForeColor=Color.HotPink;
+					s.Styles[Style.Batch.Word].ForeColor=Color.Gray;
+					s.Styles[Style.Batch.Default].ForeColor=Color.Black;
+					s.Styles[Style.Batch.Label].ForeColor=Color.White;
+					s.Styles[Style.Batch.Label].BackColor=Color.Black;
+					s.Styles[Style.Batch.Operator].ForeColor=Color.Black;
+					
+					s.Lexer=Lexer.Batch;
+					
+				}
+				
+				else if (str.EndsWith(".asm")) {
+					
+					
+					
+				}
+				
+				s.KeyUp += delegate(Object x,KeyEventArgs y) {
+						
+					if(y.KeyCode==Keys.Space)
+						s.Update();
+				
+				};
+				
+				this.fileTabs.SelectTab(tc);
 				
 			}
 			
@@ -167,44 +205,6 @@ namespace AsmEditor {
 				return;
 			
 			this.loadTabPage(nodeName);
-			
-		}
-		
-		private void highlightSyntax (Object o,EventArgs e) {
-			
-			//call this more efficiently,maybe after every space? line? etc
-			//maybe don't highlight already highlighted lines,etc.
-			
-			StringBuilder sb = new StringBuilder();
-			
-			RichTextBox rtb = (o as RichTextBox);
-			Int32 pos,i = 0;
-			Boolean inQuotes = false;
-			foreach (String s in rtb.Lines) {
-				
-				//rtb.Select(i,s.Length);
-				
-				pos = 0;
-				inQuotes = false;
-				foreach (Char c in s) {
-					
-					if (c==';') {
-						
-						rtb.Select((i+pos),(s.Length-i));
-						rtb.SelectionColor=Color.DimGray;
-						break;
-						
-					}
-						
-					
-					++pos;
-					
-				}
-				
-				i+=s.Length;
-				
-			}
-			rtb.DeselectAll();
 			
 		}
 		
