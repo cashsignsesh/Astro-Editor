@@ -25,8 +25,12 @@ namespace AsmEditor {
 	
 	public partial class MainForm : Form {
 		
-		public const String recentsFile = "./.recents";
-		public const String settingsFile = "./.settings";
+		private static String exePath = Path.GetDirectoryName(Application.ExecutablePath)+@"\";
+		public const String _recentsFile = ".recents";
+		public const String _settingsFile = ".settings";
+		
+		public static String recentsFile = MainForm.exePath+MainForm._recentsFile;
+		public static String settingsFile = MainForm.exePath+MainForm._settingsFile;
 		
 		private static Random r = new Random();
 		
@@ -76,8 +80,6 @@ namespace AsmEditor {
 					fs.Write(data,0,data.Length);
 				
 			}
-			
-			//TODO:: make it so that any .ae file will autorun to this application
 			
 		}
 		
@@ -136,7 +138,7 @@ namespace AsmEditor {
 					                                     	Location=new Point(0,0),
 					                                     	Name="PB-"+MainForm.r.Next(0,100000000).ToString(),
 					                                     	Size=new Size(16,16),
-					                                     	Image=(listM<41)?Bitmap.FromFile("./newer.png"):Bitmap.FromFile("./older.png")
+					                                     	Image=(listM<41)?Bitmap.FromFile(MainForm.exePath+"newer.png"):Bitmap.FromFile(MainForm.exePath+"older.png")
 				                                     	});
 			
 			p.Controls.Add(new Label(){

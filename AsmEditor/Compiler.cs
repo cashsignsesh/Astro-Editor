@@ -27,9 +27,10 @@ namespace AsmEditor {
 			
 		}
 		
-		public void compile () {
+		public String compile () {
 			
-			
+			String compiledExe = "";
+			return compiledExe;
 			
 		}
 		

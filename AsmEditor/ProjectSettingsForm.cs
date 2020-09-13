@@ -68,7 +68,7 @@ namespace AsmEditor {
 				Environment.Exit(0);
 				
 			}
-			
+			else MessageBox.Show("Settings were saved but are not in effect.");
 			
 		}
 	}

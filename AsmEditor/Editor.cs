@@ -45,6 +45,20 @@ namespace AsmEditor {
 				
 				InitializeComponent();
 				
+				#if DEBUG
+				
+				AppDomain.CurrentDomain.UnhandledException+=delegate (Object s,UnhandledExceptionEventArgs e) {
+					try { this.editorErrors.Text+=(e.ExceptionObject as Exception).ToString()+'\n'; }
+					catch (Exception) { /*this.editorErrors probably not loaded*/ }
+				};
+				
+				Application.ThreadException+=delegate (Object s,ThreadExceptionEventArgs e) {
+					try { this.editorErrors.Text+=e.Exception.ToString()+'\n'; }
+					catch (Exception) { /*this.editorErrors probably not loaded*/ }
+				};
+				
+				#else
+				
 				AppDomain.CurrentDomain.UnhandledException+=delegate (Object s,UnhandledExceptionEventArgs e) {
 					try { this.editorErrors.Text+=(e.ExceptionObject as Exception).Message+'\n'; }
 					catch (Exception) { /*this.editorErrors probably not loaded*/ }
@@ -54,6 +68,8 @@ namespace AsmEditor {
 					try { this.editorErrors.Text+=e.Exception.Message+'\n'; }
 					catch (Exception) { /*this.editorErrors probably not loaded*/ }
 				};
+				
+				#endif
 				
 				if (!(File.Exists(projectPath))) {
 					
@@ -73,14 +89,15 @@ namespace AsmEditor {
 				this.entryFile = Path.GetDirectoryName(this.projectPath)+'\\'+header.pEntryFile;
 				this.loadTabPage(this.entryFile);
 				ImageList imageList = new ImageList();
+				String str = Path.GetDirectoryName(Application.ExecutablePath);
 				imageList.Images.AddRange(new []{
 				                          	
-				                          	Image.FromFile("./Folder.png"),
-				                          	Image.FromFile("./Assembly.png"),
-				                          	Image.FromFile("./Batch.png"),
-				                          	Image.FromFile("./Resources.png"),
-				                          	Image.FromFile("./Generic.png"),
-				                          	Image.FromFile("./Project.png")
+				                          	Image.FromFile(str+@"\Folder.png"),
+				                          	Image.FromFile(str+@"\Assembly.png"),
+				                          	Image.FromFile(str+@"\Batch.png"),
+				                          	Image.FromFile(str+@"\Resources.png"),
+				                          	Image.FromFile(str+@"\Generic.png"),
+				                          	Image.FromFile(str+@"\Project.png")
 				                          		
 				                          });
 				this.projectTreeView.ImageList = imageList;
@@ -93,12 +110,10 @@ namespace AsmEditor {
 					this.projectNode.Nodes.Insert(0,new TreeNode(){Name=this.resourcesDir,ImageIndex=3,SelectedImageIndex=3,Text="Resources"});
 				
 				ToolStrip ts = new ToolStrip();
-				
 				ToolStripDropDownButton tdsb = new ToolStripDropDownButton () { Name="File",Text="File"} ;
 				ToolStripDropDownButton tdsb0 = new ToolStripDropDownButton () { Name="Edit",Text="Edit"} ;
 				ToolStripDropDownButton tdsb1 = new ToolStripDropDownButton () { Name="Project",Text="Project"} ;
 				ToolStripDropDownButton tdsb2 = new ToolStripDropDownButton () { Name="Search",Text="Search"} ;
-				
 				tdsb.DropDown=fileContextMenuStrip;
 				tdsb0.DropDown=editContextMenuStrip;
 				tdsb1.DropDown=projectContextMenuStrip;
@@ -157,10 +172,14 @@ namespace AsmEditor {
 					}
 					
 				};
-				
+				this.KeyPreview=true;
 				
 			}
+			#if DEBUG
+			catch (IOException ex) { MessageBox.Show(ex.ToString()); }
+			#else
 			catch (IOException ex) { MessageBox.Show(ex.Message); }
+			#endif
 			catch (Exception ex) { MessageBox.Show("Unhandled exception: " + ex.ToString()); }
 			
 		}
@@ -346,8 +365,7 @@ namespace AsmEditor {
 		
 		private void debug () {
 			
-			//TODO:: call this when F5 is pressed
-			this.compile();
+			this.compile();//Start process of ret value?
 			
 		}
 		
@@ -410,12 +428,13 @@ namespace AsmEditor {
 		
 		private void AddResourceToolStripMenuItem1Click (Object sender,EventArgs e) { this.createResources(); }
 		
-		private void compile () {
+		private String compile () {
 			
-			foreach (String s in Directory.GetFiles(this.resourcesDir))
-				File.Copy(s,this.compiler.compileDir+@"\"+Path.GetFileName(s));
+			if (Directory.Exists(this.resourcesDir))
+				foreach (String s in Directory.GetFiles(this.resourcesDir))
+					File.Copy(s,this.compiler.compileDir+@"\"+Path.GetFileName(s));
 			
-			this.compiler.compile();
+			return this.compiler.compile();
 			
 		}
 		
@@ -501,6 +520,16 @@ namespace AsmEditor {
 			
 		}
 		
+		
+		private void EditorKeyDown (Object sender,KeyEventArgs e) {
+			
+			if (e.KeyCode==Keys.F5)
+				this.debug();
+			
+		}
+		
+		
+		private void CompileToolStripMenuItem1Click (Object sender, EventArgs e) { this.compile(); }
 	}
 	
 }
