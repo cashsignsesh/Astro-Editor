@@ -170,7 +170,6 @@ namespace AsmEditor {
 			
 			this.projectTabPage.AutoScroll = true;
 			this.loadProjectTreeView();
-			//TODO:: load in files in folders and folders in files and further children
 			//TODO:: (in paint probably) resizing controls accordingly when form resized
 			//TODO:: saving (save in memory at least in tabclose, ask to save on project exit, save on CTRL+S&CTRL+SHIFT+S, save on click in contextmenustrip, think of others)
 			this.BringToFront();
