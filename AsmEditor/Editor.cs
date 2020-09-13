@@ -272,12 +272,14 @@ namespace AsmEditor {
 		
 		private void loadProjectTreeView () {
 			
-			this.projectNode.Nodes.AddRange(this.getNodesFromPath(this.projectPathDir+'\\'+this.header.pSrcDir,this.projectNode).Select(x=>{x.SelectedImageIndex=x.ImageIndex; return x;}).ToArray());
+			this.projectNode.Nodes.AddRange(this.getNodesFromPath(this.projectPathDir+'\\'+this.header.pSrcDir).Select(x=>{x.SelectedImageIndex=x.ImageIndex; return x;}).ToArray());
+			foreach (TreeNode tn in this.projectNode.Nodes.Cast<TreeNode>().Where(x=>Directory.Exists(this.projectPathDir+x.Name)))
+				this.writeAllDescendants(this.projectPathDir+tn.Name,this.projectTreeView,tn,this.projectPathDir);
 			this.projectNode.Expand();
 			
 		}
 		
-		private IEnumerable<TreeNode> getNodesFromPath (String path,TreeNode parent) {
+		private IEnumerable<TreeNode> getNodesFromPath (String path) {
 			
 			foreach (String s in Directory.GetDirectories(path).Select(x=>x.Remove(0,this.projectPathDir.Length)).Where(x=>x.Substring(1)!=this.header.pBinDir))
 				yield return new TreeNode(){Name=s,ImageIndex=0,Text=(s.Contains(@"\"))?s.Split('\\').Last():s};
@@ -362,7 +364,7 @@ namespace AsmEditor {
 			if (this.latestInteracted==null)
 				return;
 			
-			Process.Start(new ProcessStartInfo(){FileName=@"C:\Windows\Explorer.exe",Arguments=(this.latestInteracted.Name.Split('\\').Last().Contains('.'))?Path.GetDirectoryName(this.latestInteracted.Name):this.projectPathDir+this.latestInteracted.Name});
+			Process.Start(new ProcessStartInfo(){FileName=@"C:\Windows\Explorer.exe",Arguments=(File.Exists(this.latestInteracted.Name))?Path.GetDirectoryName(this.latestInteracted.Name):this.projectPathDir+this.latestInteracted.Name});
 			
 		}
 		
@@ -484,9 +486,19 @@ namespace AsmEditor {
 			
 		}
 		
-		private void RunToolStripMenuItemClick (Object sender,EventArgs e) {
+		private void RunToolStripMenuItemClick (Object sender,EventArgs e) { Process.Start(this.latestInteracted.Name); }
+		
+		private void writeAllDescendants (String path,TreeView tv,TreeNode parent,String ext="") {
 			
-			Process.Start(this.latestInteracted.Name);
+			foreach (TreeNode tn in this.getNodesFromPath(path)) {
+				
+				tn.SelectedImageIndex=tn.ImageIndex;
+				parent.Nodes.Add(tn);
+				String str = ext+tn.Name;
+				if (Directory.Exists(str))
+					this.writeAllDescendants(str,tv,tn,ext);
+				
+			}
 			
 		}
 		

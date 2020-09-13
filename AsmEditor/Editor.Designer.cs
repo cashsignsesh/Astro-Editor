@@ -497,7 +497,7 @@ namespace AsmEditor
 									this.runToolStripMenuItem,
 									this.deleteToolStripMenuItem1});
 			this.batchTreeViewItemContextMenuStrip.Name = "contextMenuStrip1";
-			this.batchTreeViewItemContextMenuStrip.Size = new System.Drawing.Size(178, 114);
+			this.batchTreeViewItemContextMenuStrip.Size = new System.Drawing.Size(178, 92);
 			// 
 			// openToolStripMenuItem2
 			// 
