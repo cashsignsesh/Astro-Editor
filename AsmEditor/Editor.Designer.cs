@@ -73,6 +73,33 @@ namespace AsmEditor
 			this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.closeAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.closeAllButThisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.projectTreeViewItemContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.openFromExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.projectSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.addResourceToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.folderTreeViewItemContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.openToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.openFromExplorerToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.expandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.contractToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.batchTreeViewItemContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.openToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.openFromExplorerToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.assemblyOrGenericTreeViewItemContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.openToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+			this.openFromExplorerToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+			this.deleteToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.resourcesTreeViewItemContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.importResourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.removeResourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.viewResourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.deleteToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
 			this.mainTabs.SuspendLayout();
 			this.projectTabPage.SuspendLayout();
 			this.errorsPanel.SuspendLayout();
@@ -82,6 +109,11 @@ namespace AsmEditor
 			this.projectContextMenuStrip.SuspendLayout();
 			this.searchContextMenuStrip.SuspendLayout();
 			this.tabPageContextMenuStrip.SuspendLayout();
+			this.projectTreeViewItemContextMenuStrip.SuspendLayout();
+			this.folderTreeViewItemContextMenuStrip.SuspendLayout();
+			this.batchTreeViewItemContextMenuStrip.SuspendLayout();
+			this.assemblyOrGenericTreeViewItemContextMenuStrip.SuspendLayout();
+			this.resourcesTreeViewItemContextMenuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainTabs
@@ -111,7 +143,7 @@ namespace AsmEditor
 			this.projectTreeView.Name = "projectTreeView";
 			this.projectTreeView.Size = new System.Drawing.Size(362, 449);
 			this.projectTreeView.TabIndex = 0;
-			this.projectTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ProjectTreeViewAfterSelect);
+			this.projectTreeView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ProjectTreeViewMouseClick);
 			// 
 			// settingsTabPage
 			// 
@@ -309,6 +341,7 @@ namespace AsmEditor
 			this.debugF5ToolStripMenuItem.Name = "debugF5ToolStripMenuItem";
 			this.debugF5ToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
 			this.debugF5ToolStripMenuItem.Text = "Debug (F5)";
+			this.debugF5ToolStripMenuItem.Click += new System.EventHandler(this.DebugF5ToolStripMenuItemClick);
 			// 
 			// searchContextMenuStrip
 			// 
@@ -357,6 +390,210 @@ namespace AsmEditor
 			this.closeAllButThisToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
 			this.closeAllButThisToolStripMenuItem.Text = "Close all but this";
 			// 
+			// projectTreeViewItemContextMenuStrip
+			// 
+			this.projectTreeViewItemContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.openToolStripMenuItem,
+									this.openFromExplorerToolStripMenuItem,
+									this.projectSettingsToolStripMenuItem,
+									this.addToolStripMenuItem,
+									this.addResourceToolStripMenuItem1,
+									this.expandAllToolStripMenuItem});
+			this.projectTreeViewItemContextMenuStrip.Name = "contextMenuStrip1";
+			this.projectTreeViewItemContextMenuStrip.Size = new System.Drawing.Size(178, 136);
+			// 
+			// openToolStripMenuItem
+			// 
+			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+			this.openToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.openToolStripMenuItem.Text = "Open";
+			this.openToolStripMenuItem.Click += new System.EventHandler(this.tabPageFromCmsItem);
+			// 
+			// openFromExplorerToolStripMenuItem
+			// 
+			this.openFromExplorerToolStripMenuItem.Name = "openFromExplorerToolStripMenuItem";
+			this.openFromExplorerToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.openFromExplorerToolStripMenuItem.Text = "Open from explorer";
+			this.openFromExplorerToolStripMenuItem.Click += new System.EventHandler(this.openExplorer);
+			// 
+			// projectSettingsToolStripMenuItem
+			// 
+			this.projectSettingsToolStripMenuItem.Name = "projectSettingsToolStripMenuItem";
+			this.projectSettingsToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.projectSettingsToolStripMenuItem.Text = "Project settings";
+			this.projectSettingsToolStripMenuItem.Click += new System.EventHandler(this.ProjectSettingsToolStripMenuItemClick);
+			// 
+			// addToolStripMenuItem
+			// 
+			this.addToolStripMenuItem.Name = "addToolStripMenuItem";
+			this.addToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.addToolStripMenuItem.Text = "Debug (F5)";
+			// 
+			// addResourceToolStripMenuItem1
+			// 
+			this.addResourceToolStripMenuItem1.Name = "addResourceToolStripMenuItem1";
+			this.addResourceToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
+			this.addResourceToolStripMenuItem1.Text = "Add resources";
+			this.addResourceToolStripMenuItem1.Click += new System.EventHandler(this.AddResourceToolStripMenuItem1Click);
+			// 
+			// expandAllToolStripMenuItem
+			// 
+			this.expandAllToolStripMenuItem.Name = "expandAllToolStripMenuItem";
+			this.expandAllToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.expandAllToolStripMenuItem.Text = "Expand all";
+			this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.ExpandAllToolStripMenuItemClick);
+			// 
+			// folderTreeViewItemContextMenuStrip
+			// 
+			this.folderTreeViewItemContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.openToolStripMenuItem1,
+									this.openFromExplorerToolStripMenuItem1,
+									this.expandToolStripMenuItem,
+									this.contractToolStripMenuItem,
+									this.deleteToolStripMenuItem});
+			this.folderTreeViewItemContextMenuStrip.Name = "folderTreeViewItemContextMenuStrip";
+			this.folderTreeViewItemContextMenuStrip.Size = new System.Drawing.Size(178, 114);
+			// 
+			// openToolStripMenuItem1
+			// 
+			this.openToolStripMenuItem1.Name = "openToolStripMenuItem1";
+			this.openToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
+			this.openToolStripMenuItem1.Text = "Open";
+			this.openToolStripMenuItem1.Click += new System.EventHandler(this.tabPageFromCmsItem);
+			// 
+			// openFromExplorerToolStripMenuItem1
+			// 
+			this.openFromExplorerToolStripMenuItem1.Name = "openFromExplorerToolStripMenuItem1";
+			this.openFromExplorerToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
+			this.openFromExplorerToolStripMenuItem1.Text = "Open from explorer";
+			this.openFromExplorerToolStripMenuItem1.Click += new System.EventHandler(this.openExplorer);
+			// 
+			// expandToolStripMenuItem
+			// 
+			this.expandToolStripMenuItem.Name = "expandToolStripMenuItem";
+			this.expandToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.expandToolStripMenuItem.Text = "Expand";
+			this.expandToolStripMenuItem.Click += new System.EventHandler(this.ExpandToolStripMenuItemClick);
+			// 
+			// contractToolStripMenuItem
+			// 
+			this.contractToolStripMenuItem.Name = "contractToolStripMenuItem";
+			this.contractToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.contractToolStripMenuItem.Text = "Contract";
+			this.contractToolStripMenuItem.Click += new System.EventHandler(this.ContractToolStripMenuItemClick);
+			// 
+			// deleteToolStripMenuItem
+			// 
+			this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+			this.deleteToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.deleteToolStripMenuItem.Text = "Delete";
+			this.deleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteToolStripMenuItemClick);
+			// 
+			// batchTreeViewItemContextMenuStrip
+			// 
+			this.batchTreeViewItemContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.openToolStripMenuItem2,
+									this.openFromExplorerToolStripMenuItem2,
+									this.runToolStripMenuItem,
+									this.deleteToolStripMenuItem1});
+			this.batchTreeViewItemContextMenuStrip.Name = "contextMenuStrip1";
+			this.batchTreeViewItemContextMenuStrip.Size = new System.Drawing.Size(178, 114);
+			// 
+			// openToolStripMenuItem2
+			// 
+			this.openToolStripMenuItem2.Name = "openToolStripMenuItem2";
+			this.openToolStripMenuItem2.Size = new System.Drawing.Size(177, 22);
+			this.openToolStripMenuItem2.Text = "Open";
+			this.openToolStripMenuItem2.Click += new System.EventHandler(this.tabPageFromCmsItem);
+			// 
+			// openFromExplorerToolStripMenuItem2
+			// 
+			this.openFromExplorerToolStripMenuItem2.Name = "openFromExplorerToolStripMenuItem2";
+			this.openFromExplorerToolStripMenuItem2.Size = new System.Drawing.Size(177, 22);
+			this.openFromExplorerToolStripMenuItem2.Text = "Open from explorer";
+			this.openFromExplorerToolStripMenuItem2.Click += new System.EventHandler(this.openExplorer);
+			// 
+			// runToolStripMenuItem
+			// 
+			this.runToolStripMenuItem.Name = "runToolStripMenuItem";
+			this.runToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.runToolStripMenuItem.Text = "Run";
+			this.runToolStripMenuItem.Click += new System.EventHandler(this.RunToolStripMenuItemClick);
+			// 
+			// deleteToolStripMenuItem1
+			// 
+			this.deleteToolStripMenuItem1.Name = "deleteToolStripMenuItem1";
+			this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
+			this.deleteToolStripMenuItem1.Text = "Delete";
+			this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteFileLatestTV);
+			// 
+			// assemblyOrGenericTreeViewItemContextMenuStrip
+			// 
+			this.assemblyOrGenericTreeViewItemContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.openToolStripMenuItem3,
+									this.openFromExplorerToolStripMenuItem3,
+									this.deleteToolStripMenuItem2});
+			this.assemblyOrGenericTreeViewItemContextMenuStrip.Name = "assemblyOrGenericTreeViewItemContextMenuStrip";
+			this.assemblyOrGenericTreeViewItemContextMenuStrip.Size = new System.Drawing.Size(178, 70);
+			// 
+			// openToolStripMenuItem3
+			// 
+			this.openToolStripMenuItem3.Name = "openToolStripMenuItem3";
+			this.openToolStripMenuItem3.Size = new System.Drawing.Size(177, 22);
+			this.openToolStripMenuItem3.Text = "Open";
+			this.openToolStripMenuItem3.Click += new System.EventHandler(this.tabPageFromCmsItem);
+			// 
+			// openFromExplorerToolStripMenuItem3
+			// 
+			this.openFromExplorerToolStripMenuItem3.Name = "openFromExplorerToolStripMenuItem3";
+			this.openFromExplorerToolStripMenuItem3.Size = new System.Drawing.Size(177, 22);
+			this.openFromExplorerToolStripMenuItem3.Text = "Open from explorer";
+			this.openFromExplorerToolStripMenuItem3.Click += new System.EventHandler(this.openExplorer);
+			// 
+			// deleteToolStripMenuItem2
+			// 
+			this.deleteToolStripMenuItem2.Name = "deleteToolStripMenuItem2";
+			this.deleteToolStripMenuItem2.Size = new System.Drawing.Size(177, 22);
+			this.deleteToolStripMenuItem2.Text = "Delete";
+			this.deleteToolStripMenuItem2.Click += new System.EventHandler(this.deleteFileLatestTV);
+			// 
+			// resourcesTreeViewItemContextMenuStrip
+			// 
+			this.resourcesTreeViewItemContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.importResourceToolStripMenuItem,
+									this.removeResourceToolStripMenuItem,
+									this.viewResourcesToolStripMenuItem,
+									this.deleteToolStripMenuItem3});
+			this.resourcesTreeViewItemContextMenuStrip.Name = "resourcesTreeViewItemContextMenuStrip";
+			this.resourcesTreeViewItemContextMenuStrip.Size = new System.Drawing.Size(166, 92);
+			// 
+			// importResourceToolStripMenuItem
+			// 
+			this.importResourceToolStripMenuItem.Name = "importResourceToolStripMenuItem";
+			this.importResourceToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+			this.importResourceToolStripMenuItem.Text = "Import resource";
+			this.importResourceToolStripMenuItem.Click += new System.EventHandler(this.ImportResourceToolStripMenuItemClick);
+			// 
+			// removeResourceToolStripMenuItem
+			// 
+			this.removeResourceToolStripMenuItem.Name = "removeResourceToolStripMenuItem";
+			this.removeResourceToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+			this.removeResourceToolStripMenuItem.Text = "Remove resource";
+			// 
+			// viewResourcesToolStripMenuItem
+			// 
+			this.viewResourcesToolStripMenuItem.Name = "viewResourcesToolStripMenuItem";
+			this.viewResourcesToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+			this.viewResourcesToolStripMenuItem.Text = "View resources";
+			this.viewResourcesToolStripMenuItem.Click += new System.EventHandler(this.ViewResourcesToolStripMenuItemClick);
+			// 
+			// deleteToolStripMenuItem3
+			// 
+			this.deleteToolStripMenuItem3.Name = "deleteToolStripMenuItem3";
+			this.deleteToolStripMenuItem3.Size = new System.Drawing.Size(165, 22);
+			this.deleteToolStripMenuItem3.Text = "Delete";
+			this.deleteToolStripMenuItem3.Click += new System.EventHandler(this.DeleteToolStripMenuItem3Click);
+			// 
 			// Editor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -379,8 +616,40 @@ namespace AsmEditor
 			this.projectContextMenuStrip.ResumeLayout(false);
 			this.searchContextMenuStrip.ResumeLayout(false);
 			this.tabPageContextMenuStrip.ResumeLayout(false);
+			this.projectTreeViewItemContextMenuStrip.ResumeLayout(false);
+			this.folderTreeViewItemContextMenuStrip.ResumeLayout(false);
+			this.batchTreeViewItemContextMenuStrip.ResumeLayout(false);
+			this.assemblyOrGenericTreeViewItemContextMenuStrip.ResumeLayout(false);
+			this.resourcesTreeViewItemContextMenuStrip.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.ToolStripMenuItem expandAllToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem3;
+		private System.Windows.Forms.ToolStripMenuItem viewResourcesToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem removeResourceToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem importResourceToolStripMenuItem;
+		private System.Windows.Forms.ContextMenuStrip resourcesTreeViewItemContextMenuStrip;
+		private System.Windows.Forms.ToolStripMenuItem addResourceToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem2;
+		private System.Windows.Forms.ToolStripMenuItem openFromExplorerToolStripMenuItem3;
+		private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem3;
+		private System.Windows.Forms.ContextMenuStrip assemblyOrGenericTreeViewItemContextMenuStrip;
+		private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem openFromExplorerToolStripMenuItem2;
+		private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem2;
+		private System.Windows.Forms.ContextMenuStrip batchTreeViewItemContextMenuStrip;
+		private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem contractToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem expandToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem openFromExplorerToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem1;
+		private System.Windows.Forms.ContextMenuStrip folderTreeViewItemContextMenuStrip;
+		private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem projectSettingsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem openFromExplorerToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
+		private System.Windows.Forms.ContextMenuStrip projectTreeViewItemContextMenuStrip;
 		private System.Windows.Forms.ToolStripMenuItem closeAllButThisToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem closeAllToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
@@ -416,8 +685,6 @@ namespace AsmEditor
 		private System.Windows.Forms.TabPage settingsTabPage;
 		private System.Windows.Forms.TabPage projectTabPage;
 		private System.Windows.Forms.TabControl mainTabs;
-		
-		
 		
 	}
 }

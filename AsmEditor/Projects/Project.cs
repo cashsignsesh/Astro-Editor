@@ -16,12 +16,14 @@ namespace AsmEditor.Projects {
 		
 		private List<String> lines;
 		
+		private String projectFile;
 		private Header _header;
 		
 		public Project (String projectFile) {
 			
 			this.lines = new List<String>(File.ReadAllLines(projectFile));
 			this._header = new Header(lines,out lines);
+			this.projectFile = projectFile;
 			
 		}
 		
@@ -31,6 +33,7 @@ namespace AsmEditor.Projects {
 			
 		}
 		
+		public String getProjectLocation () { return this.projectFile; }
 		public Header getHeader () { return this._header; }
 		
 		public override String ToString () {

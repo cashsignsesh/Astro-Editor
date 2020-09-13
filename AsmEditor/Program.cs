@@ -33,6 +33,7 @@ namespace AsmEditor {
 					return;
 					
 				default:
+					Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 					Program.run(new Editor(args.Skip(0).merge(" ")));
 					return;
 					

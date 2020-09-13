@@ -4,3 +4,6 @@ defPEntryFileဓsrc\main.asm
 defPBinDirဓsrc\bin
 defPSrcDirဓsrc\
 defPDirဓC:\Users\Elite\Documents\AstroEditor Projects\
+defaultStyleFontဓConsolas
+defaultStyleSizeFဓ13.5
+initialDirImportResဓC:\Users\Elite\Documents\Monero\wallets\Elite

@@ -18,3 +18,4 @@ C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AsmEditor\
 C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AsmEditor\obj\Debug\AsmEditor.csproj.GenerateResource.Cache
 C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AsmEditor\obj\Debug\AsmEditor.exe
 C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AsmEditor\obj\Debug\AsmEditor.pdb
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AsmEditor\obj\Debug\AsmEditor.ProjectSettingsForm.resources

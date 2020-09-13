@@ -17,6 +17,9 @@ using System.Text;
 using ScintillaNET;
 using System.ComponentModel;
 using System.Reflection;
+using System.Threading;
+using System.Diagnostics;
+using Microsoft.VisualBasic.FileIO;
 
 namespace AsmEditor {
 	
@@ -29,110 +32,136 @@ namespace AsmEditor {
 		private readonly Header header;
 		private readonly String entryFile;
 		private readonly String projectPathDir;
+		private readonly String resourcesDir;
 		
 		private TreeNode projectNode;
+		private TreeNode latestInteracted;
+		private Settings settings;
+		private Compiler compiler;
 		
 		public Editor (String projectPath) {
 			
-			InitializeComponent();
-			
-			if (!(File.Exists(projectPath))) {
+			try {
 				
-				MessageBox.Show("Error: could not find project at " + projectPath);
-				Environment.Exit(0);
-				return;
+				InitializeComponent();
 				
-			}
-			
-			this.projectPath = projectPath;
-			this.project = new Project(this.projectPath);
-			this.header = project.getHeader();
-			this.fileTabs.TabPages.Clear();
-			this.entryFile = Path.GetDirectoryName(this.projectPath)+'\\'+header.pEntryFile;
-			this.loadTabPage(this.entryFile);
-			ImageList imageList = new ImageList();
-			imageList.Images.AddRange(new []{
-			                          	
-			                          	Image.FromFile("./Folder.png"),
-			                          	Image.FromFile("./Assembly.png"),
-			                          	Image.FromFile("./Batch.png"),
-			                          	Image.FromFile("./Resources.png"),
-			                          	Image.FromFile("./Generic.png"),
-			                          	Image.FromFile("./Project.png")
-			                          		
-			                          });
-			this.projectTreeView.ImageList = imageList;
-			this.projectNode = this.projectTreeView.Nodes.Add(this.header.pName);
-			this.projectNode.ImageIndex=5;
-			this.projectNode.SelectedImageIndex=5;
-			this.projectNode.Name = this.projectPath;
-			ToolStrip ts = new ToolStrip();
-			
-			ToolStripDropDownButton tdsb = new ToolStripDropDownButton () { Name="File",Text="File"} ;
-			ToolStripDropDownButton tdsb0 = new ToolStripDropDownButton () { Name="Edit",Text="Edit"} ;
-			ToolStripDropDownButton tdsb1 = new ToolStripDropDownButton () { Name="Project",Text="Project"} ;
-			ToolStripDropDownButton tdsb2 = new ToolStripDropDownButton () { Name="Search",Text="Search"} ;
-			
-			tdsb.DropDown=fileContextMenuStrip;
-			tdsb0.DropDown=editContextMenuStrip;
-			tdsb1.DropDown=projectContextMenuStrip;
-			tdsb2.DropDown=searchContextMenuStrip;
-			
-			ts.Items.AddRange(new [] { tdsb,tdsb0,tdsb1,tdsb2 });
-			
-			ts.Dock = DockStyle.Top;
-			
-			this.Controls.Add(ts);
-			
-			this.fileTabs.MouseUp+=delegate (Object s,MouseEventArgs e) {
+				AppDomain.CurrentDomain.UnhandledException+=delegate (Object s,UnhandledExceptionEventArgs e) {
+					try { this.editorErrors.Text+=(e.ExceptionObject as Exception).Message+'\n'; }
+					catch (Exception) { /*this.editorErrors probably not loaded*/ }
+				};
 				
-				if (e.Button!=MouseButtons.Right)
+				Application.ThreadException+=delegate (Object s,ThreadExceptionEventArgs e) {
+					try { this.editorErrors.Text+=e.Exception.Message+'\n'; }
+					catch (Exception) { /*this.editorErrors probably not loaded*/ }
+				};
+				
+				if (!(File.Exists(projectPath))) {
+					
+					MessageBox.Show("Error: could not find project at " + projectPath);
+					Environment.Exit(0);
 					return;
-				
-				Int32 i = 0;
-				IEnumerable<TabPage> tabPageEnumerator = this.fileTabs.TabPages.Cast<TabPage>();
-				foreach (TabPage tp in tabPageEnumerator) {
-					
-					if (this.fileTabs.GetTabRect(i).Contains(e.Location)) {
-						
-						this.tabPageContextMenuStrip.Show(this.fileTabs,e.Location);
-						
-						this.tabPageContextMenuStrip.Items[0].Click+=delegate { 
-							
-							this.fileTabs.TabPages.Remove(tp); 
-							this.rmEvents(this.tabPageContextMenuStrip.Items);
-							
-						};
-						this.tabPageContextMenuStrip.Items[1].Click+=delegate { 
-							
-							this.fileTabs.TabPages.Clear(); 
-							this.rmEvents(this.tabPageContextMenuStrip.Items);
-							
-						};
-						this.tabPageContextMenuStrip.Items[2].Click+=delegate {
-							
-							foreach (TabPage tp0 in tabPageEnumerator) {
-								
-								if (tp0!=tp)
-									this.fileTabs.TabPages.Remove(tp0);
-								
-							}
-							
-							this.rmEvents(this.tabPageContextMenuStrip.Items);
-							
-						};
-						
-						return;
-						
-					}
-					
-					++i;
 					
 				}
 				
-			};
-			
-			this.projectPathDir = Path.GetDirectoryName(this.projectPath);
+				this.settings = new Settings(MainForm.settingsFile);
+				this.projectPath = projectPath;
+				this.projectPathDir = Path.GetDirectoryName(this.projectPath);
+				this.project = new Project(this.projectPath);
+				this.header = project.getHeader();
+				this.compiler = new Compiler(this.project,this.projectPathDir);
+				this.fileTabs.TabPages.Clear();
+				this.entryFile = Path.GetDirectoryName(this.projectPath)+'\\'+header.pEntryFile;
+				this.loadTabPage(this.entryFile);
+				ImageList imageList = new ImageList();
+				imageList.Images.AddRange(new []{
+				                          	
+				                          	Image.FromFile("./Folder.png"),
+				                          	Image.FromFile("./Assembly.png"),
+				                          	Image.FromFile("./Batch.png"),
+				                          	Image.FromFile("./Resources.png"),
+				                          	Image.FromFile("./Generic.png"),
+				                          	Image.FromFile("./Project.png")
+				                          		
+				                          });
+				this.projectTreeView.ImageList = imageList;
+				this.projectNode = this.projectTreeView.Nodes.Add(this.header.pName);
+				this.projectNode.ImageIndex=5;
+				this.projectNode.SelectedImageIndex=5;
+				this.projectNode.Name = this.projectPath;
+				this.resourcesDir = this.projectPathDir+@"\"+this.header.pSrcDir+"Resources";
+				if (Directory.Exists(this.resourcesDir))
+					this.projectNode.Nodes.Insert(0,new TreeNode(){Name=this.resourcesDir,ImageIndex=3,SelectedImageIndex=3,Text="Resources"});
+				
+				ToolStrip ts = new ToolStrip();
+				
+				ToolStripDropDownButton tdsb = new ToolStripDropDownButton () { Name="File",Text="File"} ;
+				ToolStripDropDownButton tdsb0 = new ToolStripDropDownButton () { Name="Edit",Text="Edit"} ;
+				ToolStripDropDownButton tdsb1 = new ToolStripDropDownButton () { Name="Project",Text="Project"} ;
+				ToolStripDropDownButton tdsb2 = new ToolStripDropDownButton () { Name="Search",Text="Search"} ;
+				
+				tdsb.DropDown=fileContextMenuStrip;
+				tdsb0.DropDown=editContextMenuStrip;
+				tdsb1.DropDown=projectContextMenuStrip;
+				tdsb2.DropDown=searchContextMenuStrip;
+				
+				ts.Items.AddRange(new [] { tdsb,tdsb0,tdsb1,tdsb2 });
+				
+				ts.Dock = DockStyle.Top;
+				
+				this.Controls.Add(ts);
+				
+				this.fileTabs.MouseUp+=delegate (Object s,MouseEventArgs e) {
+					
+					if (e.Button!=MouseButtons.Right)
+						return;
+					
+					Int32 i = 0;
+					IEnumerable<TabPage> tabPageEnumerator = this.fileTabs.TabPages.Cast<TabPage>();
+					foreach (TabPage tp in tabPageEnumerator) {
+						
+						if (this.fileTabs.GetTabRect(i).Contains(e.Location)) {
+							
+							this.tabPageContextMenuStrip.Show(this.fileTabs,e.Location);
+							
+							this.tabPageContextMenuStrip.Items[0].Click+=delegate { 
+								
+								this.fileTabs.TabPages.Remove(tp); 
+								this.rmEvents(this.tabPageContextMenuStrip.Items);
+								
+							};
+							this.tabPageContextMenuStrip.Items[1].Click+=delegate { 
+								
+								this.fileTabs.TabPages.Clear(); 
+								this.rmEvents(this.tabPageContextMenuStrip.Items);
+								
+							};
+							this.tabPageContextMenuStrip.Items[2].Click+=delegate {
+								
+								foreach (TabPage tp0 in tabPageEnumerator) {
+									
+									if (tp0!=tp)
+										this.fileTabs.TabPages.Remove(tp0);
+									
+								}
+								
+								this.rmEvents(this.tabPageContextMenuStrip.Items);
+								
+							};
+							
+							return;
+							
+						}
+						
+						++i;
+						
+					}
+					
+				};
+				
+				
+			}
+			catch (IOException ex) { MessageBox.Show(ex.Message); }
+			catch (Exception ex) { MessageBox.Show("Unhandled exception: " + ex.ToString()); }
 			
 		}
 		
@@ -141,13 +170,9 @@ namespace AsmEditor {
 			
 			this.projectTabPage.AutoScroll = true;
 			this.loadProjectTreeView();
-			//TODO::Add resources functionality into ae project, drop it into bin @ runtime or smth
-			//TODO::Modify defP- settings by right clicking on project from viewer
-			//TODO::Open from explorer on right click
-			//TODO::TabPages, right click and close this file, close all files but this, close all files
-			//TODO:: Finish contextmenustrip/toolstrip work
+			//TODO:: load in files in folders and folders in files and further children
 			//TODO:: (in paint probably) resizing controls accordingly when form resized
-			//TODO:: AsmEditor exception handler (Rtb on this form)
+			//TODO:: saving (save in memory at least in tabclose, ask to save on project exit, save on CTRL+S&CTRL+SHIFT+S, save on click in contextmenustrip, think of others)
 			this.BringToFront();
 			
 		}
@@ -161,7 +186,6 @@ namespace AsmEditor {
 				TabPage tc = new TabPage (str);
 				this.fileTabs.TabPages.Add(tc);
 				Scintilla s = null;
-				try{
 				tc.Controls.Add(new Scintilla () {
 				                	
 				                	Size=new Size(tc.Size.Width-2,tc.Size.Height-2),
@@ -170,10 +194,9 @@ namespace AsmEditor {
 				                });
 				
 				s = tc.Controls.Cast<Control>().Where(x=>x.GetType()==typeof(Scintilla)).First() as Scintilla;
-				}catch(Exception ex){MessageBox.Show(ex.ToString());}
 				s.StyleResetDefault();
-				s.Styles[Style.Default].Font="Consolas";
-				s.Styles[Style.Default].SizeF=13.5F;
+				s.Styles[Style.Default].Font=this.settings.getSetting("defaultStyleFont","Consolas");
+				s.Styles[Style.Default].SizeF=Single.Parse(this.settings.getSetting("defaultStyleSizeF","13.5"));
 				s.StyleClearAll();
 				
 				s.WrapMode = WrapMode.None;
@@ -219,6 +242,21 @@ namespace AsmEditor {
 			
 		}
 		
+		private void loadTabPage (TreeNode tn) {
+			
+			String nodeText=tn.Text;
+			IEnumerable<TabPage> cast = this.fileTabs.TabPages.Cast<TabPage>();
+			IEnumerable<TabPage> query = (cast.Where(x=>x.Text==nodeText));
+			IEnumerable<TabPage> query0 = (cast.Where(x=>x.Text==Path.GetFileName(this.project.getProjectLocation()).ToLower()));
+			if (query.Count()!=0)
+				this.fileTabs.SelectTab(query.First());
+			else if ((nodeText==this.header.pName)&&(query0.Count()!=0))
+				this.fileTabs.SelectTab(query0.First());
+			else
+				this.loadTabPage(tn.Name);
+			
+		}
+		
 		private void ClearEditorErrorsBtnClick (Object sender,EventArgs e) {
 			
 			this.editorErrors.Clear();
@@ -249,21 +287,6 @@ namespace AsmEditor {
 			
 		}
 		
-		
-		private void ProjectTreeViewAfterSelect (Object sender,TreeViewEventArgs e) {
-			
-			String nodeName=e.Node.Name;
-			
-			if (!(File.Exists(nodeName)))
-				nodeName=this.projectPathDir+nodeName;
-			
-			if (!(File.Exists(nodeName)))
-				return;
-			
-			this.loadTabPage(nodeName);
-			
-		}
-		
 		private void rmEvents (ToolStripItemCollection tsmic) {
 			
 			foreach (ToolStripItem t in tsmic.Cast<ToolStripItem>()) {
@@ -274,6 +297,196 @@ namespace AsmEditor {
 		        	list.RemoveHandler(o,list[o]);
 		        
 			}
+			
+		}
+		
+		
+		private void ProjectTreeViewMouseClick (Object sender,MouseEventArgs e) {
+			
+			MouseButtons btn = e.Button;
+			
+			if ((btn!=MouseButtons.Left)&&(btn!=MouseButtons.Right))
+				return;
+			
+			TreeNode tn = projectTreeView.GetNodeAt(e.Location);
+			String nodeName=tn.Name,nodeText=tn.Text;
+			this.latestInteracted=tn;
+			
+			if (btn==MouseButtons.Left) {
+				
+				projectTreeView.SelectedNode=tn;
+				
+				if (!(File.Exists(nodeName)))
+					nodeName=this.projectPathDir+nodeName;
+				
+				if (!(File.Exists(nodeName)))
+					return;
+				
+				this.loadTabPage(tn);
+				
+				return;
+			
+			}
+			
+			if (tn.ImageIndex==5) 
+				projectTreeViewItemContextMenuStrip.Show(this.projectTreeView,e.Location);
+			else if (tn.ImageIndex==0)
+				folderTreeViewItemContextMenuStrip.Show(this.projectTreeView,e.Location);
+			else if (tn.ImageIndex==1||tn.ImageIndex==4)
+				assemblyOrGenericTreeViewItemContextMenuStrip.Show(this.projectTreeView,e.Location);
+			else if (tn.ImageIndex==2)
+				batchTreeViewItemContextMenuStrip.Show(this.projectTreeView,e.Location);
+			else if (tn.ImageIndex==3)
+				resourcesTreeViewItemContextMenuStrip.Show(this.projectTreeView,e.Location);
+			else
+				assemblyOrGenericTreeViewItemContextMenuStrip.Show(this.projectTreeView,e.Location);
+			
+		}
+		
+		private void debug () {
+			
+			//TODO:: call this when F5 is pressed
+			this.compile();
+			
+		}
+		
+		
+		private void DebugF5ToolStripMenuItemClick (Object sender, EventArgs e) {
+			
+			this.debug();
+			
+		}
+		
+		private void openExplorer () {
+			
+			if (this.latestInteracted==null)
+				return;
+			
+			Process.Start(new ProcessStartInfo(){FileName=@"C:\Windows\Explorer.exe",Arguments=(this.latestInteracted.Name.Split('\\').Last().Contains('.'))?Path.GetDirectoryName(this.latestInteracted.Name):this.projectPathDir+this.latestInteracted.Name});
+			
+		}
+		
+		private void openExplorer(Object s,EventArgs e){this.openExplorer();}//Editor.Designer.Cs is not happy with delegate{} in code :)
+		
+		private void tabPageFromCmsItem(Object s,EventArgs e){this.loadTabPage(this.latestInteracted);}
+		
+		private void ExpandToolStripMenuItemClick (Object sender, EventArgs e) {this.latestInteracted.Expand();}
+		
+		private void ExpandAllToolStripMenuItemClick (Object sender, EventArgs e) {this.projectNode.ExpandAll();}
+		
+		private void ProjectSettingsToolStripMenuItemClick (Object sender, EventArgs e) { new ProjectSettingsForm(this.settings,this.project,this).Show(); }
+		
+		public void saveAll () {
+			
+			
+			
+		}
+		
+		private void saveFile (String file) {
+			
+			
+			
+		}
+		
+		private void addResource (String path) {
+			
+			
+			
+		}
+		
+		private void createResources () {
+			
+			if (Directory.Exists(this.resourcesDir)) {
+				
+				MessageBox.Show("You already have a resources folder!");
+				return;
+				
+			}
+			Directory.CreateDirectory(this.resourcesDir);
+			this.projectNode.Nodes.Insert(0,new TreeNode(){Name=this.resourcesDir,ImageIndex=3,SelectedImageIndex=3,Text="Resources"});
+			
+		}
+		
+		private void AddResourceToolStripMenuItem1Click (Object sender,EventArgs e) { this.createResources(); }
+		
+		private void compile () {
+			
+			foreach (String s in Directory.GetFiles(this.resourcesDir))
+				File.Copy(s,this.compiler.compileDir+@"\"+Path.GetFileName(s));
+			
+			this.compiler.compile();
+			
+		}
+		
+		
+		private void ImportResourceToolStripMenuItemClick (Object sender,EventArgs e) {
+			
+			OpenFileDialog ofd = new OpenFileDialog(){
+				Filter="Any file (*.*)|*.*",
+				InitialDirectory=this.settings.getSetting("initialDirImportRes",Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+			};
+			
+			if (ofd.ShowDialog()!=DialogResult.OK)
+				return;
+		
+			String fn = ofd.FileName;
+			this.settings.setSetting("initialDirImportRes",Path.GetDirectoryName(fn));
+			File.Copy(fn,this.resourcesDir+@"\"+Path.GetFileName(fn));
+			
+		}
+		
+		
+		private void RemoveResourceToolStripMenuItemClick (Object sender,EventArgs e) {
+			
+			OpenFileDialog ofd = new OpenFileDialog(){
+				Filter="Any file (*.*)|*.*",
+				InitialDirectory=this.resourcesDir
+			};
+			
+			if (ofd.ShowDialog()!=DialogResult.OK)
+				return;
+			
+			String fn = ofd.FileName;
+			if (Path.GetDirectoryName(fn)!=this.resourcesDir) {
+				
+				MessageBox.Show("Please select a file from the resources directory!");
+				return;
+				
+			}
+			
+			FileSystem.DeleteFile(fn,UIOption.OnlyErrorDialogs,RecycleOption.SendToRecycleBin);
+			
+		}
+		
+		private void ViewResourcesToolStripMenuItemClick (Object sender,EventArgs e) { Process.Start(new ProcessStartInfo(){FileName=@"C:\Windows\Explorer.exe",Arguments=this.resourcesDir}); }
+		
+		
+		private void DeleteToolStripMenuItem3Click (Object sender,EventArgs e) {
+			
+			this.projectNode.Nodes.RemoveAt(0);
+			FileSystem.DeleteDirectory(this.resourcesDir,UIOption.OnlyErrorDialogs,RecycleOption.SendToRecycleBin);
+			
+		}
+		
+		private void ContractToolStripMenuItemClick (Object sender,EventArgs e) { this.latestInteracted.Collapse(); }
+		
+		private void DeleteToolStripMenuItemClick (Object sender,EventArgs e) { 
+			
+			this.projectNode.Nodes.Find(this.latestInteracted.Name,true).First().Remove();
+			FileSystem.DeleteDirectory(this.projectPathDir+@"\"+this.latestInteracted.Name,UIOption.OnlyErrorDialogs,RecycleOption.SendToRecycleBin);
+			
+		}
+		
+		private void deleteFileLatestTV (Object sender,EventArgs e) {
+			
+			this.projectNode.Nodes.Find(this.latestInteracted.Name,true).First().Remove();
+			FileSystem.DeleteFile(this.projectPathDir+@"\"+this.latestInteracted.Name,UIOption.OnlyErrorDialogs,RecycleOption.SendToRecycleBin);
+			
+		}
+		
+		private void RunToolStripMenuItemClick (Object sender,EventArgs e) {
+			
+			Process.Start(this.latestInteracted.Name);
 			
 		}
 		
