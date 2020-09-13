@@ -69,6 +69,10 @@ namespace AsmEditor
 			this.searchContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.findToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.replaceToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.tabPageContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.closeAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.closeAllButThisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mainTabs.SuspendLayout();
 			this.projectTabPage.SuspendLayout();
 			this.errorsPanel.SuspendLayout();
@@ -77,6 +81,7 @@ namespace AsmEditor
 			this.editContextMenuStrip.SuspendLayout();
 			this.projectContextMenuStrip.SuspendLayout();
 			this.searchContextMenuStrip.SuspendLayout();
+			this.tabPageContextMenuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainTabs
@@ -325,6 +330,33 @@ namespace AsmEditor
 			this.replaceToolStripMenuItem1.Size = new System.Drawing.Size(115, 22);
 			this.replaceToolStripMenuItem1.Text = "Replace";
 			// 
+			// tabPageContextMenuStrip
+			// 
+			this.tabPageContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.closeToolStripMenuItem,
+									this.closeAllToolStripMenuItem,
+									this.closeAllButThisToolStripMenuItem});
+			this.tabPageContextMenuStrip.Name = "tabPageContextMenuStrip";
+			this.tabPageContextMenuStrip.Size = new System.Drawing.Size(162, 70);
+			// 
+			// closeToolStripMenuItem
+			// 
+			this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+			this.closeToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+			this.closeToolStripMenuItem.Text = "Close";
+			// 
+			// closeAllToolStripMenuItem
+			// 
+			this.closeAllToolStripMenuItem.Name = "closeAllToolStripMenuItem";
+			this.closeAllToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+			this.closeAllToolStripMenuItem.Text = "Close all";
+			// 
+			// closeAllButThisToolStripMenuItem
+			// 
+			this.closeAllButThisToolStripMenuItem.Name = "closeAllButThisToolStripMenuItem";
+			this.closeAllButThisToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+			this.closeAllButThisToolStripMenuItem.Text = "Close all but this";
+			// 
 			// Editor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -346,8 +378,13 @@ namespace AsmEditor
 			this.editContextMenuStrip.ResumeLayout(false);
 			this.projectContextMenuStrip.ResumeLayout(false);
 			this.searchContextMenuStrip.ResumeLayout(false);
+			this.tabPageContextMenuStrip.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.ToolStripMenuItem closeAllButThisToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem closeAllToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
+		private System.Windows.Forms.ContextMenuStrip tabPageContextMenuStrip;
 		private System.Windows.Forms.ToolStripMenuItem replaceToolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem findToolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem debugF5ToolStripMenuItem;

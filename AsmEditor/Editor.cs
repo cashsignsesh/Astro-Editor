@@ -15,10 +15,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ScintillaNET;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace AsmEditor {
 	
 	public partial class Editor : Form {
+		
+		private const Int32 numCtPadding = 3;
 		
 		private readonly String projectPath;
 		private readonly Project project;
@@ -80,6 +84,54 @@ namespace AsmEditor {
 			
 			this.Controls.Add(ts);
 			
+			this.fileTabs.MouseUp+=delegate (Object s,MouseEventArgs e) {
+				
+				if (e.Button!=MouseButtons.Right)
+					return;
+				
+				Int32 i = 0;
+				IEnumerable<TabPage> tabPageEnumerator = this.fileTabs.TabPages.Cast<TabPage>();
+				foreach (TabPage tp in tabPageEnumerator) {
+					
+					if (this.fileTabs.GetTabRect(i).Contains(e.Location)) {
+						
+						this.tabPageContextMenuStrip.Show(this.fileTabs,e.Location);
+						
+						this.tabPageContextMenuStrip.Items[0].Click+=delegate { 
+							
+							this.fileTabs.TabPages.Remove(tp); 
+							this.rmEvents(this.tabPageContextMenuStrip.Items);
+							
+						};
+						this.tabPageContextMenuStrip.Items[1].Click+=delegate { 
+							
+							this.fileTabs.TabPages.Clear(); 
+							this.rmEvents(this.tabPageContextMenuStrip.Items);
+							
+						};
+						this.tabPageContextMenuStrip.Items[2].Click+=delegate {
+							
+							foreach (TabPage tp0 in tabPageEnumerator) {
+								
+								if (tp0!=tp)
+									this.fileTabs.TabPages.Remove(tp0);
+								
+							}
+							
+							this.rmEvents(this.tabPageContextMenuStrip.Items);
+							
+						};
+						
+						return;
+						
+					}
+					
+					++i;
+					
+				}
+				
+			};
+			
 			this.projectPathDir = Path.GetDirectoryName(this.projectPath);
 			
 		}
@@ -89,12 +141,11 @@ namespace AsmEditor {
 			
 			this.projectTabPage.AutoScroll = true;
 			this.loadProjectTreeView();
-			//Add resources functionality into ae project, drop it into bin @ runtime or smth
-			//Modify defP- settings by right clicking on project from viewer
-			//Open from explorer on right click
-			//TabPages, right click and close this file, close all files but this, close all files
+			//TODO::Add resources functionality into ae project, drop it into bin @ runtime or smth
+			//TODO::Modify defP- settings by right clicking on project from viewer
+			//TODO::Open from explorer on right click
+			//TODO::TabPages, right click and close this file, close all files but this, close all files
 			//TODO:: Finish contextmenustrip/toolstrip work
-			//TODO:: Syntax highlighting
 			//TODO:: (in paint probably) resizing controls accordingly when form resized
 			//TODO:: AsmEditor exception handler (Rtb on this form)
 			this.BringToFront();
@@ -114,8 +165,7 @@ namespace AsmEditor {
 				tc.Controls.Add(new Scintilla () {
 				                	
 				                	Size=new Size(tc.Size.Width-2,tc.Size.Height-2),
-				                	Location=new Point(1,1),
-				                	Text=File.ReadAllText(fn)
+				                	Location=new Point(1,1)
 				                	
 				                });
 				
@@ -127,8 +177,6 @@ namespace AsmEditor {
 				s.StyleClearAll();
 				
 				s.WrapMode = WrapMode.None;
-				//TODO:: Add line count
-				
 								
 				if (str.EndsWith(".bat")) {
 					
@@ -141,8 +189,6 @@ namespace AsmEditor {
 					s.Styles[Style.Batch.Label].BackColor=Color.Black;
 					s.Styles[Style.Batch.Operator].ForeColor=Color.Black;
 					
-					//TODO::keywords?
-					
 					s.Lexer=Lexer.Batch;
 					
 				}
@@ -151,17 +197,22 @@ namespace AsmEditor {
 					
 					s.Styles[Style.Asm.Comment].ForeColor=Color.Gray;
 					
+					s.Lexer=Lexer.Asm;
+					
 				}
 				
-				s.KeyUp += delegate(Object x,KeyEventArgs y) {
-						
-					if(y.KeyCode==Keys.Space)
-						s.Update();
-				
+				Int32 lldc = 0;
+				s.TextChanged+=delegate{
+					
+					Int32 largestLineDigitCount = s.Lines.Count().ToString().Length;
+					if (largestLineDigitCount==lldc) return;
+					
+					s.Margins.First().Width=s.TextWidth(Style.LineNumber,new String('9',largestLineDigitCount+1))+Editor.numCtPadding;
+					lldc=largestLineDigitCount;
+					
 				};
 				
-				s.TextChanged += delegate {  };
-				
+				s.Text=File.ReadAllText(fn);
 				this.fileTabs.SelectTab(tc);
 				
 			}
@@ -210,6 +261,19 @@ namespace AsmEditor {
 				return;
 			
 			this.loadTabPage(nodeName);
+			
+		}
+		
+		private void rmEvents (ToolStripItemCollection tsmic) {
+			
+			foreach (ToolStripItem t in tsmic.Cast<ToolStripItem>()) {
+				
+		        Object o = typeof(ToolStripItem).GetField("EventClick",BindingFlags.Static|BindingFlags.NonPublic).GetValue(t);
+		        
+		        using (EventHandlerList list = (EventHandlerList)(t.GetType().GetProperty("Events",BindingFlags.NonPublic|BindingFlags.Instance)).GetValue(t))
+		        	list.RemoveHandler(o,list[o]);
+		        
+			}
 			
 		}
 		
