@@ -574,7 +574,14 @@ namespace AsmEditor {
 		}
 		
 		private void addAsm (Boolean toProject=false) {
-			//TODO:: add asm w/ latestInteracted
+			
+			OpenFileDialog ofd = new OpenFileDialog(){
+				Filter="Assembly file(*.asm)|*.asm",
+				InitialDirectory=this.settings.getSetting("asmInitDirImportF",Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+			};
+			
+			if (ofd.ShowDialog()!=DialogResult.OK)
+				return;
 			
 			if (toProject) {
 				
@@ -588,7 +595,14 @@ namespace AsmEditor {
 		}
 		
 		private void addBat (Boolean toProject=false) {
-			//TODO:: add bat w/ latestInteracted
+			
+			OpenFileDialog ofd = new OpenFileDialog(){
+				Filter="Batch file(*.bat)|*.bat",
+				InitialDirectory=this.settings.getSetting("batInitDirImportF",Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+			};
+			
+			if (ofd.ShowDialog()!=DialogResult.OK)
+				return;
 			
 			if (toProject) {
 				
