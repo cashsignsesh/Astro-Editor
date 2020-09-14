@@ -573,15 +573,31 @@ namespace AsmEditor {
 			
 		}
 		
-		private void addAsm () {
-			//TODO:: add asm
+		private void addAsm (Boolean toProject=false) {
+			//TODO:: add asm w/ latestInteracted
 			
+			if (toProject) {
+				
+				//Add to project
+				return;
+				
+			}
+			
+			//Add w/ latestInteracted
 			
 		}
 		
-		private void addBat () {
-			//TODO:: add bat
+		private void addBat (Boolean toProject=false) {
+			//TODO:: add bat w/ latestInteracted
 			
+			if (toProject) {
+				
+				//Add to project
+				return;
+				
+			}
+			
+			//Add w/ latestInteracted
 			
 		}
 		
@@ -589,9 +605,13 @@ namespace AsmEditor {
 		
 		private void BatchFileToolStripMenuItemClick (Object sender, EventArgs e) { this.addBat(); }
 		
-		private void AssemblyFileToolStripMenuItem1Click (Object sender, EventArgs e) { this.addAsm(); }
+		private void AssemblyFileToolStripMenuItem1Click (Object sender, EventArgs e) { this.addAsm(true); }
 		
-		private void BatchFileToolStripMenuItem1Click (Object sender, EventArgs e) { this.addBat(); }
+		private void BatchFileToolStripMenuItem1Click (Object sender, EventArgs e) { this.addBat(true); }
+		
+		private void AssemblyFileToolStripMenuItem2Click (Object sender, EventArgs e) { this.addAsm(); }
+		
+		private void BatchFileToolStripMenuItem2Click (Object sender, EventArgs e) { this.addBat(); }
 		
 	}
 	
