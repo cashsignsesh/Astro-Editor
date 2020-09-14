@@ -241,7 +241,7 @@ namespace AsmEditor {
 			
 			data = Encoding.UTF8.GetBytes(@"Yatta yatta yoo
 one day the default hello world asm file will be loaded here
-WHEN I LEARN ASSEMBLY IN THE FIRST PLACE!!!!");
+WHEN I LEARN ASSEMBLY IN THE FIRST PLACE!!!!");//TODO:: change this to hello world after I learn :)
 			using (FileStream fs=File.Create(pDir+defPEntryFile))
 				fs.Write(data,0,data.Length);
 			

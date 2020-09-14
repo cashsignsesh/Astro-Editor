@@ -29,6 +29,8 @@ namespace AsmEditor {
 		
 		public String compile () {
 			
+			//TODO:: this shit
+			
 			String compiledExe = "";
 			return compiledExe;
 			

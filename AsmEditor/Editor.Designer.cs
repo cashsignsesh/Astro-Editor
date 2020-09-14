@@ -266,12 +266,14 @@ namespace AsmEditor
 			this.saveFileCtrlSToolStripMenuItem.Name = "saveFileCtrlSToolStripMenuItem";
 			this.saveFileCtrlSToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
 			this.saveFileCtrlSToolStripMenuItem.Text = "Save File (Ctrl+S)";
+			this.saveFileCtrlSToolStripMenuItem.Click += new System.EventHandler(this.SaveFileCtrlSToolStripMenuItemClick);
 			// 
 			// saveProjectCtrlShiftSToolStripMenuItem
 			// 
 			this.saveProjectCtrlShiftSToolStripMenuItem.Name = "saveProjectCtrlShiftSToolStripMenuItem";
 			this.saveProjectCtrlShiftSToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
 			this.saveProjectCtrlShiftSToolStripMenuItem.Text = "Save All (Ctrl+Shift+S)";
+			this.saveProjectCtrlShiftSToolStripMenuItem.Click += new System.EventHandler(this.SaveProjectCtrlShiftSToolStripMenuItemClick);
 			// 
 			// editContextMenuStrip
 			// 
@@ -301,7 +303,7 @@ namespace AsmEditor
 									this.compileToolStripMenuItem1,
 									this.debugF5ToolStripMenuItem});
 			this.projectContextMenuStrip.Name = "projectContextMenuStrip";
-			this.projectContextMenuStrip.Size = new System.Drawing.Size(153, 114);
+			this.projectContextMenuStrip.Size = new System.Drawing.Size(145, 92);
 			// 
 			// createFileToolStripMenuItem1
 			// 
@@ -309,7 +311,7 @@ namespace AsmEditor
 									this.assemblyFileToolStripMenuItem1,
 									this.batchFileToolStripMenuItem1});
 			this.createFileToolStripMenuItem1.Name = "createFileToolStripMenuItem1";
-			this.createFileToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+			this.createFileToolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
 			this.createFileToolStripMenuItem1.Text = "Create file";
 			// 
 			// assemblyFileToolStripMenuItem1
@@ -327,20 +329,20 @@ namespace AsmEditor
 			// addResourceToolStripMenuItem
 			// 
 			this.addResourceToolStripMenuItem.Name = "addResourceToolStripMenuItem";
-			this.addResourceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.addResourceToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
 			this.addResourceToolStripMenuItem.Text = "Add resource";
 			// 
 			// compileToolStripMenuItem1
 			// 
 			this.compileToolStripMenuItem1.Name = "compileToolStripMenuItem1";
-			this.compileToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+			this.compileToolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
 			this.compileToolStripMenuItem1.Text = "Compile";
 			this.compileToolStripMenuItem1.Click += new System.EventHandler(this.CompileToolStripMenuItem1Click);
 			// 
 			// debugF5ToolStripMenuItem
 			// 
 			this.debugF5ToolStripMenuItem.Name = "debugF5ToolStripMenuItem";
-			this.debugF5ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.debugF5ToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
 			this.debugF5ToolStripMenuItem.Text = "Debug (F5)";
 			this.debugF5ToolStripMenuItem.Click += new System.EventHandler(this.DebugF5ToolStripMenuItemClick);
 			// 
@@ -608,6 +610,7 @@ namespace AsmEditor
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "Editor";
 			this.Text = "Editor";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditorFormClosing);
 			this.Load += new System.EventHandler(this.EditorLoad);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EditorKeyDown);
 			this.mainTabs.ResumeLayout(false);

@@ -20,6 +20,7 @@ using System.Reflection;
 using System.Threading;
 using System.Diagnostics;
 using Microsoft.VisualBasic.FileIO;
+using System.Windows.Input;
 
 namespace AsmEditor {
 	
@@ -125,7 +126,7 @@ namespace AsmEditor {
 				
 				this.Controls.Add(ts);
 				
-				this.fileTabs.MouseUp+=delegate (Object s,MouseEventArgs e) {
+				this.fileTabs.MouseUp+=delegate (Object s,System.Windows.Forms.MouseEventArgs e) {
 					
 					if (e.Button!=MouseButtons.Right)
 						return;
@@ -140,12 +141,14 @@ namespace AsmEditor {
 							
 							this.tabPageContextMenuStrip.Items[0].Click+=delegate { 
 								
+								this.saveFile(tp);
 								this.fileTabs.TabPages.Remove(tp); 
 								this.rmEvents(this.tabPageContextMenuStrip.Items);
 								
 							};
 							this.tabPageContextMenuStrip.Items[1].Click+=delegate { 
 								
+								this.saveAll();
 								this.fileTabs.TabPages.Clear(); 
 								this.rmEvents(this.tabPageContextMenuStrip.Items);
 								
@@ -190,7 +193,7 @@ namespace AsmEditor {
 			this.projectTabPage.AutoScroll = true;
 			this.loadProjectTreeView();
 			//TODO:: (in paint probably) resizing controls accordingly when form resized
-			//TODO:: saving (save in memory at least in tabclose, ask to save on project exit, save on CTRL+S&CTRL+SHIFT+S, save on click in contextmenustrip, think of others)
+			//TODO:: Ask to save on app exit
 			this.BringToFront();
 			
 		}
@@ -202,6 +205,7 @@ namespace AsmEditor {
 			if (!(this.fileTabs.TabPages.Cast<TabPage>().Select(x=>x.Text).Contains(str))) {
 				
 				TabPage tc = new TabPage (str);
+				tc.Name=fn;
 				this.fileTabs.TabPages.Add(tc);
 				Scintilla s = null;
 				tc.Controls.Add(new Scintilla () {
@@ -252,6 +256,9 @@ namespace AsmEditor {
 					lldc=largestLineDigitCount;
 					
 				};
+				
+				s.ClearCmdKey(Keys.Control|Keys.S);
+				s.ClearCmdKey(Keys.Control|Keys.Shift|Keys.S);
 				
 				s.Text=File.ReadAllText(fn);
 				this.fileTabs.SelectTab(tc);
@@ -321,7 +328,7 @@ namespace AsmEditor {
 		}
 		
 		
-		private void ProjectTreeViewMouseClick (Object sender,MouseEventArgs e) {
+		private void ProjectTreeViewMouseClick (Object sender,System.Windows.Forms.MouseEventArgs e) {
 			
 			MouseButtons btn = e.Button;
 			
@@ -365,7 +372,7 @@ namespace AsmEditor {
 		
 		private void debug () {
 			
-			this.compile();//Start process of ret value?
+			this.compile();//Start process of ret value?TODO & DEBUGGER :))))))))))))))
 			
 		}
 		
@@ -397,13 +404,14 @@ namespace AsmEditor {
 		
 		public void saveAll () {
 			
-			
+			foreach (TabPage t in this.fileTabs.TabPages.Cast<TabPage>())
+				this.saveFile(t);
 			
 		}
 		
-		private void saveFile (String file) {
+		private void saveFile (TabPage p) {
 			
-			
+			File.WriteAllText(p.Name,p.Controls.Cast<Control>().Where(x=>x.GetType()==typeof(Scintilla)).First().Text);
 			
 		}
 		
@@ -521,15 +529,36 @@ namespace AsmEditor {
 		}
 		
 		
-		private void EditorKeyDown (Object sender,KeyEventArgs e) {
+		private void EditorKeyDown (Object sender,System.Windows.Forms.KeyEventArgs e) {
 			
 			if (e.KeyCode==Keys.F5)
 				this.debug();
+			else if (e.KeyCode==Keys.S) {
+				
+				if (!(Keyboard.IsKeyDown(Key.LeftCtrl)))
+					return;
+				
+				if (Keyboard.IsKeyDown(Key.LeftShift))
+					this.saveAll();
+				else
+					this.saveFile(this.fileTabs.SelectedTab);
+				
+			}
 			
 		}
 		
-		
 		private void CompileToolStripMenuItem1Click (Object sender, EventArgs e) { this.compile(); }
+		
+		private void SaveFileCtrlSToolStripMenuItemClick (Object sender, EventArgs e) { this.saveFile(this.fileTabs.SelectedTab); }
+		
+		private void SaveProjectCtrlShiftSToolStripMenuItemClick (Object sender, EventArgs e) { this.saveAll(); }
+		
+		private void EditorFormClosing (Object sender, FormClosingEventArgs e) {
+			
+			if (MessageBox.Show("Should you save all unsaved changes?","Exiting Astro Editor",MessageBoxButtons.YesNo,MessageBoxIcon.None,MessageBoxDefaultButton.Button1)==DialogResult.Yes)
+				this.saveAll();
+			
+		}
 	}
 	
 }
