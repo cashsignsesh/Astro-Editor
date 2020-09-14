@@ -72,6 +72,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compiler.cs" />
+    <Compile Include="CreateFileEditorDialog.cs" />
+    <Compile Include="CreateFileEditorDialog.Designer.cs">
+      <DependentUpon>CreateFileEditorDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Editor.cs" />
     <Compile Include="Editor.Designer.cs">
       <DependentUpon>Editor.cs</DependentUpon>
@@ -100,6 +104,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CreateFileEditorDialog.resx">
+      <DependentUpon>CreateFileEditorDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Editor.resx">
       <DependentUpon>Editor.cs</DependentUpon>
     </EmbeddedResource>

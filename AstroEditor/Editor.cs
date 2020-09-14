@@ -573,47 +573,65 @@ namespace AsmEditor {
 			
 		}
 		
-		private void addAsm (Boolean toProject=false) {
+		private void createFile (Boolean toProject,String type) {
 			
-			OpenFileDialog ofd = new OpenFileDialog(){
-				Filter="Assembly file(*.asm)|*.asm",
-				InitialDirectory=this.settings.getSetting("asmInitDirImportF",Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+			String dir = this.latestInteracted.Name;
+			CreateFileEditorDialog cfed = new CreateFileEditorDialog (){
+				type=type,
+				dir=dir
 			};
 			
-			if (ofd.ShowDialog()!=DialogResult.OK)
+			CreateFileEditorDialog.ShowDialog(cfed,()=>{
+			                                  	
+			if (String.IsNullOrEmpty(cfed.fn))
 				return;
+			
+			String cfedFn = null;
+			if (latestInteracted!=null)
+				cfedFn = this.projectPathDir+this.latestInteracted.Name+@"\"+cfed.fn+type;
+			else 
+				cfedFn = cfed.fn;
+			
+			File.Create(cfedFn).Close();
+			this.loadTabPage(cfedFn);
+			
+			String s = Path.GetFileName(cfedFn);
+			Int32 imageIndex = (s.EndsWith(".asm"))?1:(s.EndsWith(".bat"))?2:4;
+			
+			MessageBox.Show(cfedFn);
 			
 			if (toProject) {
 				
-				//Add to project
+				this.projectNode.Nodes.Add(new TreeNode(){
+				                           	
+				                           	Name=cfedFn,
+				                           	Text=s,
+				                           	ImageIndex=imageIndex,
+				                           	SelectedImageIndex=imageIndex
+				                           	
+				                           });
 				return;
 				
 			}
 			
-			//Add w/ latestInteracted
+			this.latestInteracted.Nodes.Add(new TreeNode(){
+				                           	
+					                           	Name=cfedFn,
+					                           	Text=s,
+					                           	ImageIndex=imageIndex,
+					                           	SelectedImageIndex=imageIndex
+					                           	
+					                        });
+			
+			this.latestInteracted.Expand();
+			
+			                                  });
 			
 		}
 		
-		private void addBat (Boolean toProject=false) {
-			
-			OpenFileDialog ofd = new OpenFileDialog(){
-				Filter="Batch file(*.bat)|*.bat",
-				InitialDirectory=this.settings.getSetting("batInitDirImportF",Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
-			};
-			
-			if (ofd.ShowDialog()!=DialogResult.OK)
-				return;
-			
-			if (toProject) {
-				
-				//Add to project
-				return;
-				
-			}
-			
-			//Add w/ latestInteracted
-			
-		}
+		private void addAsm (Boolean toProject=false) { this.createFile(toProject,".asm"); }
+		
+		private void addBat (Boolean toProject=false) { this.createFile(toProject,".bat"); }
 		
 		private void AssemblyFileToolStripMenuItemClick (Object sender, EventArgs e) { this.addAsm(); }
 		
