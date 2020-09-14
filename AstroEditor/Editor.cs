@@ -21,6 +21,7 @@ using System.Threading;
 using System.Diagnostics;
 using Microsoft.VisualBasic.FileIO;
 using System.Windows.Input;
+using AsmEditor.Utils;
 
 namespace AsmEditor {
 	
@@ -39,6 +40,7 @@ namespace AsmEditor {
 		private TreeNode latestInteracted;
 		private Settings settings;
 		private Compiler compiler;
+		private Size pSize;
 		
 		public Editor (String projectPath) {
 			
@@ -192,7 +194,15 @@ namespace AsmEditor {
 			
 			this.projectTabPage.AutoScroll = true;
 			this.loadProjectTreeView();
-			//TODO:: (in paint probably) resizing controls accordingly when form resized
+			
+			this.mainTabs.Anchor=AnchorStyles.Top|AnchorStyles.Left|AnchorStyles.Bottom;
+			this.fileTabs.Anchor=AnchorStyles.Top|AnchorStyles.Right|AnchorStyles.Left|AnchorStyles.Bottom;
+			this.errorsPanel.Anchor=AnchorStyles.Bottom|AnchorStyles.Left;
+			
+			foreach (Control c in this.mainTabs.allChildren())
+				c.Anchor = AnchorStyles.Top|AnchorStyles.Right|AnchorStyles.Left|AnchorStyles.Bottom;
+			
+			//TODO:: toolstrip item functions
 			this.BringToFront();
 			
 		}
@@ -258,6 +268,10 @@ namespace AsmEditor {
 				
 				s.ClearCmdKey(Keys.Control|Keys.S);
 				s.ClearCmdKey(Keys.Control|Keys.Shift|Keys.S);
+				
+				tc.Anchor=AnchorStyles.Top|AnchorStyles.Right|AnchorStyles.Left|AnchorStyles.Bottom;
+				foreach (Control con in tc.allChildren())
+					con.Anchor=AnchorStyles.Top|AnchorStyles.Right|AnchorStyles.Left|AnchorStyles.Bottom;
 				
 				s.Text=File.ReadAllText(fn);
 				this.fileTabs.SelectTab(tc);
@@ -546,18 +560,39 @@ namespace AsmEditor {
 			
 		}
 		
-		private void CompileToolStripMenuItem1Click (Object sender, EventArgs e) { this.compile(); }
+		private void CompileToolStripMenuItem1Click (Object sender,EventArgs e) { this.compile(); }
 		
-		private void SaveFileCtrlSToolStripMenuItemClick (Object sender, EventArgs e) { this.saveFile(this.fileTabs.SelectedTab); }
+		private void SaveFileCtrlSToolStripMenuItemClick (Object sender,EventArgs e) { this.saveFile(this.fileTabs.SelectedTab); }
 		
-		private void SaveProjectCtrlShiftSToolStripMenuItemClick (Object sender, EventArgs e) { this.saveAll(); }
+		private void SaveProjectCtrlShiftSToolStripMenuItemClick (Object sender,EventArgs e) { this.saveAll(); }
 		
-		private void EditorFormClosing (Object sender, FormClosingEventArgs e) {
+		private void EditorFormClosing (Object sender,FormClosingEventArgs e) {
 			
-			if (MessageBox.Show("Should you save all unsaved changes?","Exiting Astro Editor",MessageBoxButtons.YesNo,MessageBoxIcon.None,MessageBoxDefaultButton.Button1)==DialogResult.Yes)
+			if (MessageBox.Show("Should you save any unsaved changes?","Exiting Astro Editor",MessageBoxButtons.YesNo,MessageBoxIcon.None,MessageBoxDefaultButton.Button1)==DialogResult.Yes)
 				this.saveAll();
 			
 		}
+		
+		private void addAsm () {
+			//TODO:: add asm
+			
+			
+		}
+		
+		private void addBat () {
+			//TODO:: add bat
+			
+			
+		}
+		
+		private void AssemblyFileToolStripMenuItemClick (Object sender, EventArgs e) { this.addAsm(); }
+		
+		private void BatchFileToolStripMenuItemClick (Object sender, EventArgs e) { this.addBat(); }
+		
+		private void AssemblyFileToolStripMenuItem1Click (Object sender, EventArgs e) { this.addAsm(); }
+		
+		private void BatchFileToolStripMenuItem1Click (Object sender, EventArgs e) { this.addBat(); }
+		
 	}
 	
 }

@@ -109,8 +109,8 @@ namespace AsmEditor
 			this.newProjectPictureBox.Size = new System.Drawing.Size(52, 52);
 			this.newProjectPictureBox.TabIndex = 4;
 			this.newProjectPictureBox.TabStop = false;
-			this.newProjectPictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.paintBorderEastPB);
 			this.newProjectPictureBox.Click += new System.EventHandler(this.newProjectPanelClick);
+			this.newProjectPictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.paintBorderEastPB);
 			// 
 			// newProjectPanel
 			// 
@@ -120,8 +120,8 @@ namespace AsmEditor
 			this.newProjectPanel.Name = "newProjectPanel";
 			this.newProjectPanel.Size = new System.Drawing.Size(216, 54);
 			this.newProjectPanel.TabIndex = 5;
-			this.newProjectPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.paintBorder);
 			this.newProjectPanel.Click += new System.EventHandler(this.newProjectPanelClick);
+			this.newProjectPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.paintBorder);
 			// 
 			// openProjectPanel
 			// 
@@ -170,7 +170,7 @@ namespace AsmEditor
 			this.Controls.Add(this.loadProgressBar);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "MainForm";
-			this.Text = "AsmEditor";
+			this.Text = "Astro Editor";
 			this.Load += new System.EventHandler(this.MainFormLoad);
 			this.recentProjectsGroupBox.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.newProjectPictureBox)).EndInit();

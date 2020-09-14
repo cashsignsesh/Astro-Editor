@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace AsmEditor.Utils {
 	
@@ -75,6 +76,20 @@ namespace AsmEditor.Utils {
 				sb.Append(s+append);
 			
 			return sb.ToString();
+			
+		}
+		
+		public static IEnumerable<Control> allChildren (this Control c) {
+			
+			foreach (Control c0 in c.Controls) {
+				
+				yield return c0;
+				IEnumerable<Control> cArr = c0.allChildren();
+				if (cArr.Count()>0)
+					foreach (Control c1 in cArr)
+						yield return c1;
+				
+			}
 			
 		}
 		

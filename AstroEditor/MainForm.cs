@@ -20,9 +20,7 @@ using System.ComponentModel;
 
 namespace AsmEditor {
 	
-	//TODO:: Maybe rename this thing to AstroEditor ("As"tro for assembly)
 	//TODO:: make new icon for app, if name is AstroEditor, make "As" red and "troEditor" some other colour like light gray
-	
 	public partial class MainForm : Form {
 		
 		private static String exePath = Path.GetDirectoryName(Application.ExecutablePath)+@"\";

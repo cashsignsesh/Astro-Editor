@@ -19,3 +19,14 @@ C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AsmEditor\
 C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AsmEditor\obj\Debug\AsmEditor.exe
 C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AsmEditor\obj\Debug\AsmEditor.pdb
 C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AsmEditor\obj\Debug\AsmEditor.ProjectSettingsForm.resources
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\bin\Debug\AstroEditor.exe.config
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\bin\Debug\AstroEditor.exe
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\bin\Debug\AstroEditor.pdb
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\obj\Debug\AsmEditor.csprojResolveAssemblyReference.cache
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\obj\Debug\AsmEditor.Editor.resources
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\obj\Debug\AsmEditor.MainForm.resources
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\obj\Debug\AsmEditor.NewProject.resources
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\obj\Debug\AsmEditor.ProjectSettingsForm.resources
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\obj\Debug\AsmEditor.csproj.GenerateResource.Cache
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\obj\Debug\AstroEditor.exe
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\obj\Debug\AstroEditor.pdb
