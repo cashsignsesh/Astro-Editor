@@ -52,6 +52,9 @@
     <Reference Include="ScintillaNET">
       <HintPath>bin\Debug\ScintillaNET.dll</HintPath>
     </Reference>
+    <Reference Include="ScintillaNET FindReplaceDialog">
+      <HintPath>bin\Debug\ScintillaNET FindReplaceDialog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>

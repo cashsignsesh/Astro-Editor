@@ -22,6 +22,7 @@ using System.Diagnostics;
 using Microsoft.VisualBasic.FileIO;
 using System.Windows.Input;
 using AsmEditor.Utils;
+using ScintillaNET_FindReplaceDialog;
 
 namespace AsmEditor {
 	
@@ -40,7 +41,7 @@ namespace AsmEditor {
 		private TreeNode latestInteracted;
 		private Settings settings;
 		private Compiler compiler;
-		private Size pSize;
+		private Scintilla lastTxtChanged;
 		
 		public Editor (String projectPath) {
 			
@@ -202,7 +203,6 @@ namespace AsmEditor {
 			foreach (Control c in this.mainTabs.allChildren())
 				c.Anchor = AnchorStyles.Top|AnchorStyles.Right|AnchorStyles.Left|AnchorStyles.Bottom;
 			
-			//TODO:: toolstrip item functions
 			this.BringToFront();
 			
 		}
@@ -253,10 +253,18 @@ namespace AsmEditor {
 					
 					s.Lexer=Lexer.Asm;
 					
+					//TODO:: Autofill suggestions
+					//etc, like sharpdevelop
+					
 				}
 				
 				Int32 lldc = 0;
 				s.TextChanged+=delegate{
+					
+					this.lastTxtChanged=s;
+					
+					s.IndicatorCurrent=8;
+					s.IndicatorClearRange(0,s.TextLength);
 					
 					Int32 largestLineDigitCount = s.Lines.Count().ToString().Length;
 					if (largestLineDigitCount==lldc) return;
@@ -268,6 +276,15 @@ namespace AsmEditor {
 				
 				s.ClearCmdKey(Keys.Control|Keys.S);
 				s.ClearCmdKey(Keys.Control|Keys.Shift|Keys.S);
+				s.ClearCmdKey(Keys.Control|Keys.F);
+				s.ClearCmdKey(Keys.Control|Keys.Shift|Keys.F);
+				s.ClearCmdKey(Keys.Control|Keys.G);
+				
+				s.IndicatorCurrent=8;
+				s.IndicatorClearRange(0,s.TextLength);
+				
+				s.Indicators[8].Style=IndicatorStyle.StraightBox;
+				s.Indicators[8].ForeColor = Color.Red;
 				
 				tc.Anchor=AnchorStyles.Top|AnchorStyles.Right|AnchorStyles.Left|AnchorStyles.Bottom;
 				foreach (Control con in tc.allChildren())
@@ -385,7 +402,7 @@ namespace AsmEditor {
 		
 		private void debug () {
 			
-			this.compile();//Start process of ret value?TODO & DEBUGGER :))))))))))))))
+			this.compile();//Start process of ret value?TODO:: Debugger
 			
 		}
 		
@@ -546,10 +563,11 @@ namespace AsmEditor {
 			
 			if (e.KeyCode==Keys.F5)
 				this.debug();
-			else if (e.KeyCode==Keys.S) {
-				
-				if (!(Keyboard.IsKeyDown(Key.LeftCtrl)))
+			
+			if (!(Keyboard.IsKeyDown(Key.LeftCtrl)))
 					return;
+			
+			if (e.KeyCode==Keys.S) {
 				
 				if (Keyboard.IsKeyDown(Key.LeftShift))
 					this.saveAll();
@@ -557,6 +575,32 @@ namespace AsmEditor {
 					this.saveFile(this.fileTabs.SelectedTab);
 				
 			}
+			else if (e.KeyCode==Keys.F) {
+				
+				FindReplace fr = new FindReplace(this.fileTabs.SelectedTab.allChildren().Where(x=>x.GetType()==typeof(Scintilla)).First()as Scintilla);
+				
+				fr.FindAllResults+=delegate (Object sender0,FindResultsEventArgs e0) {
+					
+					Scintilla scin = fr.Scintilla;
+					scin.IndicatorCurrent=8;
+					
+					foreach (ScintillaNET_FindReplaceDialog.CharacterRange cr in e0.FindAllResults) {
+						
+						Int32 cpMin = cr.cpMin;
+						scin.IndicatorFillRange(cpMin,cr.cpMax-cpMin);
+						
+					}
+					
+				};
+				
+				if (Keyboard.IsKeyDown(Key.LeftShift))
+					fr.ShowReplace();
+				else
+					fr.ShowFind();
+				
+			}
+			else if (e.KeyCode==Keys.G)
+				new GoTo(this.fileTabs.SelectedTab.allChildren().Where(x=>x.GetType()==typeof(Scintilla)).First()as Scintilla).ShowGoToDialog();
 			
 		}
 		
@@ -644,6 +688,98 @@ namespace AsmEditor {
 		private void AssemblyFileToolStripMenuItem2Click (Object sender, EventArgs e) { this.addAsm(); }
 		
 		private void BatchFileToolStripMenuItem2Click (Object sender, EventArgs e) { this.addBat(); }
+		
+		private void NewProjectToolStripMenuItem1Click (Object sender, EventArgs e) {
+			
+			NewProject np = new NewProject ();
+			np.onExit+=this.onNewPanel;
+			np.Show();
+			
+		}
+		
+		private void onNewPanel (Object s,NPExitEventArgs e) {
+			
+			if (!(e.success))
+				return;
+			
+			String fn = MainForm.create(e.projectName,e.type,this.settings);
+			
+			if (!(String.IsNullOrEmpty(fn)))
+				MainForm.open(fn,false);
+			
+		}
+		
+		
+		private void OpenProjectToolStripMenuItem1Click (Object sender, EventArgs e) {
+			
+			OpenFileDialog ofd = new OpenFileDialog() { Filter="Project files (*.ae)|*.ae|All files (*.*)|*.*",InitialDirectory=this.settings.getSetting("openProjInitDir",Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))};
+			
+			if (ofd.ShowDialog()==DialogResult.OK) {
+				
+				String fn = ofd.FileName;
+				this.settings.setSetting("openProjInitDir",fn);
+				MainForm.open(fn,false);
+				
+			}
+			
+		}
+		
+		private void CloseProjectToolStripMenuItem1Click (Object sender, EventArgs e) { Environment.Exit(0); }
+		
+		private void UndoCtrlZToolStripMenuItem1Click (Object sender, EventArgs e) { this.lastTxtChanged.Undo(); }
+		
+		private void RedoCtrlYToolStripMenuItem1Click (Object sender, EventArgs e) { this.lastTxtChanged.Redo(); }
+		
+		private void FindToolStripMenuItem1Click (Object sender, EventArgs e) { 
+			
+			FindReplace fr = new FindReplace(this.fileTabs.SelectedTab.allChildren().Where(x=>x.GetType()==typeof(Scintilla)).First()as Scintilla);
+				
+			fr.FindAllResults+=delegate (Object sender0,FindResultsEventArgs e0) {
+				
+				Scintilla scin = fr.Scintilla;
+				scin.IndicatorCurrent=8;
+				
+				foreach (ScintillaNET_FindReplaceDialog.CharacterRange cr in e0.FindAllResults) {
+					
+					Int32 cpMin = cr.cpMin;
+					scin.IndicatorFillRange(cpMin,cr.cpMax-cpMin);
+					
+				}
+				
+			};
+			
+			fr.ShowFind();
+			
+		}
+		
+		private void ReplaceToolStripMenuItem1Click (Object sender, EventArgs e) {
+			
+			FindReplace fr = new FindReplace(this.fileTabs.SelectedTab.allChildren().Where(x=>x.GetType()==typeof(Scintilla)).First()as Scintilla);
+				
+			fr.FindAllResults+=delegate (Object sender0,FindResultsEventArgs e0) {
+				
+				Scintilla scin = fr.Scintilla;
+				scin.IndicatorCurrent=8;
+				
+				foreach (ScintillaNET_FindReplaceDialog.CharacterRange cr in e0.FindAllResults) {
+					
+					Int32 cpMin = cr.cpMin;
+					scin.IndicatorFillRange(cpMin,cr.cpMax-cpMin);
+					
+				}
+				
+			};
+		
+			fr.ShowReplace();
+			
+		}
+		
+		
+		private void GoToToolStripMenuItemClick (Object sender, EventArgs e) {
+			
+			new GoTo(this.fileTabs.SelectedTab.allChildren().Where(x=>x.GetType()==typeof(Scintilla)).First()as Scintilla).ShowGoToDialog();
+			
+		}
 		
 	}
 	

@@ -20,7 +20,8 @@ using System.ComponentModel;
 
 namespace AsmEditor {
 	
-	//TODO:: make new icon for app, if name is AstroEditor, make "As" red and "troEditor" some other colour like light gray
+	//TODO:: Make a new icon for the app
+	// make "As" red and "troEditor" some other colour like light gray, or something along those lines
 	public partial class MainForm : Form {
 		
 		private static String exePath = Path.GetDirectoryName(Application.ExecutablePath)+@"\";
@@ -100,14 +101,13 @@ namespace AsmEditor {
 				
 				String fn = ofd.FileName;
 				this.settings.setSetting("openProjInitDir",fn);
-				this.addRecent(fn,DateTime.UtcNow);
-				this.open(fn);
+				MainForm.open(fn);
 				
 			}
 			
 		}
 		
-		private void addRecent (String recent,DateTime dt) {
+		public static void addRecent (String recent,DateTime dt) {
 			
 			List<String> lines = new List<String>(File.ReadAllLines(MainForm.recentsFile));
 			String str = recent+'?'+dt.ToString()+'\n';
@@ -151,7 +151,7 @@ namespace AsmEditor {
 			
 			this.recentProjectsList.Controls.Add(p);
 			ToolStripMenuItem tsmi = new ToolStripMenuItem(){Size=new Size(180,22),Text="Open",Name="TMSI-"+MainForm.r.Next(0,100000000).ToString() };
-			tsmi.Click+=delegate { this.open(toOpen); };
+			tsmi.Click+=delegate { MainForm.open(toOpen); };
 		
 			ContextMenuStrip cms = new ContextMenuStrip(this.components) {
 			               									Name="CMS-"+MainForm.r.Next(0,100000000).ToString()
@@ -159,7 +159,7 @@ namespace AsmEditor {
 			
 			foreach (Control c in p.Controls.Cast<Control>().Concat(new []{p})) {
 				
-				c.Click+=delegate { this.open(toOpen); };
+				c.Click+=delegate { MainForm.open(toOpen); };
 				c.MouseEnter+=delegate { p.ForeColor=Color.Red; p.BackColor=Color.LightGray; };
 				c.MouseLeave+=delegate { p.ForeColor=Color.Black;p.BackColor=Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252))))); };
 				
@@ -172,37 +172,64 @@ namespace AsmEditor {
 			
 		}
 		
-		private void open (String fn) {
+		public static void open (String fn,Boolean exit=true) {
 			
+			MainForm.addRecent(fn,DateTime.UtcNow);
 			Process.Start(new ProcessStartInfo () { Arguments=fn,FileName=Application.ExecutablePath }); 
-			Environment.Exit(0);
+			if (exit) Environment.Exit(0);
 			
 		}
 		
 		private void create (String name, ProjectType type) {
 			
+			String fn = MainForm.create(name,type,this.settings);
+			
+			if (!(String.IsNullOrEmpty(fn)))
+				MainForm.open(fn);
+			
+		}
+		
+		public void newProjectPanelClick (Object s,EventArgs e) {
+			
+			NewProject np = new NewProject ();
+			np.onExit+=this.onNewPanel;
+			np.Show();
+			
+		}
+		
+		private void onNewPanel (Object s,NPExitEventArgs e) {
+			
+			if (!(e.success))
+				return;
+			
+			this.create(e.projectName,e.type);
+			
+		}
+		
+		public static String create (String name,ProjectType type,Settings settings) {
+			
 			if (type==ProjectType.FORTRAN) {
 				
 				MessageBox.Show("FORTRAN is currently not supported!");
-				return;
+				return "";
 				
 			}
 			
 			if (type==ProjectType.NONE) {
 				
 				MessageBox.Show("Error: No project type?");
-				return;
+				return "";
 				
 			}
 			
-			String defPEntryFile = this.settings.getSetting("defPEntryFile",@"src\main.asm");
-			String defPBinDir = this.settings.getSetting("defPBinDir",@"src\bin");
-			String defPSrcDir = this.settings.getSetting("defPSrcDir",@"src\");
+			String defPEntryFile = settings.getSetting("defPEntryFile",@"src\main.asm");
+			String defPBinDir = settings.getSetting("defPBinDir",@"src\bin");
+			String defPSrcDir = settings.getSetting("defPSrcDir",@"src\");
 			
 			foreach (String s in new [] { name, defPEntryFile,defPBinDir,defPSrcDir })
 				if (s.IndexOfAny(Path.GetInvalidPathChars())!=-1) {
 					MessageBox.Show("Error creating projects: Illegal character in \""+s+"\". Illegal chars: " + new String(Path.GetInvalidPathChars()));
-					return;
+					return "";
 				}
 			
 			Byte[] data = Encoding.UTF8.GetBytes(
@@ -226,7 +253,7 @@ namespace AsmEditor {
 			
 			.ToString());
 			
-			String pDir = this.settings.getSetting("defPDir",Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)+@"\AstroEditor Projects\") + name + @"\";
+			String pDir = settings.getSetting("defPDir",Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)+@"\AstroEditor Projects\") + name + @"\";
 			
 			String fn = pDir+(name.ToLower()+".ae");
 			
@@ -239,28 +266,11 @@ namespace AsmEditor {
 			
 			data = Encoding.UTF8.GetBytes(@"Yatta yatta yoo
 one day the default hello world asm file will be loaded here
-WHEN I LEARN ASSEMBLY IN THE FIRST PLACE!!!!");//TODO:: change this to hello world after I learn :)
+WHEN I LEARN ASSEMBLY IN THE FIRST PLACE!!!!");//TODO:: Set Hello world app to default asm file
 			using (FileStream fs=File.Create(pDir+defPEntryFile))
 				fs.Write(data,0,data.Length);
 			
-			this.open(fn);
-			
-		}
-		
-		public void newProjectPanelClick (Object s,EventArgs e) {
-			
-			NewProject np = new NewProject ();
-			np.onExit+=this.onNewPanel;
-			np.Show();
-			
-		}
-		
-		private void onNewPanel (Object s,NPExitEventArgs e) {
-			
-			if (!(e.success))
-				return;
-			
-			this.create(e.projectName,e.type);
+			return fn;
 			
 		}
 		
