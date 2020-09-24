@@ -84,6 +84,7 @@ namespace AsmEditor
 			this.createFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.assemblyFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.batchFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.compilerOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.folderTreeViewItemContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.openToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.openFromExplorerToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -367,7 +368,7 @@ namespace AsmEditor
 									this.replaceToolStripMenuItem1,
 									this.goToToolStripMenuItem});
 			this.searchContextMenuStrip.Name = "contextMenuStrip4";
-			this.searchContextMenuStrip.Size = new System.Drawing.Size(192, 92);
+			this.searchContextMenuStrip.Size = new System.Drawing.Size(192, 70);
 			// 
 			// findToolStripMenuItem1
 			// 
@@ -426,9 +427,10 @@ namespace AsmEditor
 									this.addToolStripMenuItem,
 									this.addResourceToolStripMenuItem1,
 									this.expandAllToolStripMenuItem,
-									this.createFileToolStripMenuItem});
+									this.createFileToolStripMenuItem,
+									this.compilerOptionsToolStripMenuItem});
 			this.projectTreeViewItemContextMenuStrip.Name = "contextMenuStrip1";
-			this.projectTreeViewItemContextMenuStrip.Size = new System.Drawing.Size(178, 158);
+			this.projectTreeViewItemContextMenuStrip.Size = new System.Drawing.Size(178, 180);
 			// 
 			// openToolStripMenuItem
 			// 
@@ -494,6 +496,13 @@ namespace AsmEditor
 			this.batchFileToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
 			this.batchFileToolStripMenuItem.Text = "Batch file";
 			this.batchFileToolStripMenuItem.Click += new System.EventHandler(this.BatchFileToolStripMenuItemClick);
+			// 
+			// compilerOptionsToolStripMenuItem
+			// 
+			this.compilerOptionsToolStripMenuItem.Name = "compilerOptionsToolStripMenuItem";
+			this.compilerOptionsToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.compilerOptionsToolStripMenuItem.Text = "Compiler options";
+			this.compilerOptionsToolStripMenuItem.Click += new System.EventHandler(this.CompilerOptionsToolStripMenuItemClick);
 			// 
 			// folderTreeViewItemContextMenuStrip
 			// 
@@ -701,6 +710,7 @@ namespace AsmEditor
 			this.resourcesTreeViewItemContextMenuStrip.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.ToolStripMenuItem compilerOptionsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem goToToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem batchFileToolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem assemblyFileToolStripMenuItem2;

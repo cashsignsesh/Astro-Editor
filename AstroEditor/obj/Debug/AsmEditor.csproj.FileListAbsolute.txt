@@ -31,3 +31,4 @@ C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEdito
 C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\obj\Debug\AstroEditor.exe
 C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\obj\Debug\AstroEditor.pdb
 C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\obj\Debug\AsmEditor.CreateFileEditorDialog.resources
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\AstroEditor\obj\Debug\AsmEditor.CompilerOptions.resources

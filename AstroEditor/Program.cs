@@ -64,7 +64,7 @@ namespace AsmEditor {
 				
 				if (File.Exists(str)) {
 					
-					MessageBox.Show("Please run this in administrator!");
+					MessageBox.Show("Please run this as administrator!");
 					File.Delete(str);
 					Environment.Exit(0);
 					return;

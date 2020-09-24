@@ -23,6 +23,7 @@ using Microsoft.VisualBasic.FileIO;
 using System.Windows.Input;
 using AsmEditor.Utils;
 using ScintillaNET_FindReplaceDialog;
+using System.Threading.Tasks;
 
 namespace AsmEditor {
 	
@@ -88,7 +89,7 @@ namespace AsmEditor {
 				this.projectPathDir = Path.GetDirectoryName(this.projectPath);
 				this.project = new Project(this.projectPath);
 				this.header = project.getHeader();
-				this.compiler = new Compiler(this.project,this.projectPathDir);
+				this.compiler = new Compiler(this.project,this.projectPathDir,this.settings);
 				this.fileTabs.TabPages.Clear();
 				this.entryFile = Path.GetDirectoryName(this.projectPath)+'\\'+header.pEntryFile;
 				this.loadTabPage(this.entryFile);
@@ -203,6 +204,8 @@ namespace AsmEditor {
 			foreach (Control c in this.mainTabs.allChildren())
 				c.Anchor = AnchorStyles.Top|AnchorStyles.Right|AnchorStyles.Left|AnchorStyles.Bottom;
 			
+			this.Text="Editor  ("+this.header.pName+')';
+			
 			this.BringToFront();
 			
 		}
@@ -250,6 +253,17 @@ namespace AsmEditor {
 				else if (str.EndsWith(".asm")) {
 					
 					s.Styles[Style.Asm.Comment].ForeColor=Color.Gray;
+					s.Styles[Style.Asm.CommentBlock].ForeColor=Color.Gray;
+					s.Styles[Style.Asm.CommentDirective].ForeColor=Color.Gray;
+					s.Styles[Style.Asm.CpuInstruction].ForeColor=Color.Blue;
+					s.Styles[Style.Asm.Operator].ForeColor=Color.Black;
+					s.Styles[Style.Asm.Number].ForeColor=Color.DarkBlue;
+					s.Styles[Style.Asm.Character].ForeColor=Color.HotPink;
+					s.Styles[Style.Asm.Default].ForeColor=Color.Black;
+					s.Styles[Style.Asm.Directive].ForeColor=Color.Blue;
+					s.Styles[Style.Asm.DirectiveOperand].ForeColor=Color.Blue;
+					
+					s.Styles[Style.Asm.String].ForeColor=Color.LightSalmon;
 					
 					s.Lexer=Lexer.Asm;
 					
@@ -402,7 +416,21 @@ namespace AsmEditor {
 		
 		private void debug () {
 			
-			this.compile();//Start process of ret value?TODO:: Debugger
+			//TODO:: Debugger (auto set ollydbg settings) & autorun
+			String s = this.compile();
+			
+			Task.Factory.StartNew(()=> {
+			
+			    while (!(this.compiler.compilerProcess.HasExited)) Thread.Sleep(100);
+			    Int32 exitCode = this.compiler.compilerProcess.ExitCode;
+			    if (exitCode!=0) {
+			    	this.projectErrors.Text+=File.ReadAllText(this.projectPathDir+'\\'+this.header.pBinDir+"\\output.txt").Split('\n').Reverse().Skip(0).Reverse().merge("\n");
+			    	MessageBox.Show("There was an error with your code. See the project errors textbox. (Exit code: "+exitCode+")");
+			    	return;
+			    }
+			    Process.Start(s);
+			                      	
+			});
 			
 		}
 		
@@ -466,13 +494,15 @@ namespace AsmEditor {
 		
 		private void AddResourceToolStripMenuItem1Click (Object sender,EventArgs e) { this.createResources(); }
 		
-		private String compile () {
+		private String compile (Boolean explorerbit=false) {
+			
+			this.saveAll();
 			
 			if (Directory.Exists(this.resourcesDir))
 				foreach (String s in Directory.GetFiles(this.resourcesDir))
 					File.Copy(s,this.compiler.compileDir+@"\"+Path.GetFileName(s));
 			
-			return this.compiler.compile();
+			return this.compiler.compile(explorerbit);
 			
 		}
 		
@@ -538,7 +568,10 @@ namespace AsmEditor {
 		private void deleteFileLatestTV (Object sender,EventArgs e) {
 			
 			this.projectNode.Nodes.Find(this.latestInteracted.Name,true).First().Remove();
-			FileSystem.DeleteFile(this.projectPathDir+@"\"+this.latestInteracted.Name,UIOption.OnlyErrorDialogs,RecycleOption.SendToRecycleBin);
+			foreach (TabPage p in this.fileTabs.TabPages.Cast<TabPage>().Where(x=>x.Name==this.latestInteracted.Name))
+				this.fileTabs.TabPages.Remove(p);
+			try { FileSystem.DeleteFile(this.projectPathDir+@"\"+this.latestInteracted.Name,UIOption.OnlyErrorDialogs,RecycleOption.SendToRecycleBin); }
+			catch (NotSupportedException) { FileSystem.DeleteFile(this.latestInteracted.Name,UIOption.OnlyErrorDialogs,RecycleOption.SendToRecycleBin); }
 			
 		}
 		
@@ -604,7 +637,7 @@ namespace AsmEditor {
 			
 		}
 		
-		private void CompileToolStripMenuItem1Click (Object sender,EventArgs e) { this.compile(); }
+		private void CompileToolStripMenuItem1Click (Object sender,EventArgs e) { this.compile(true); }
 		
 		private void SaveFileCtrlSToolStripMenuItemClick (Object sender,EventArgs e) { this.saveFile(this.fileTabs.SelectedTab); }
 		
@@ -619,7 +652,10 @@ namespace AsmEditor {
 		
 		private void createFile (Boolean toProject,String type) {
 			
-			String dir = this.latestInteracted.Name;
+			String bleh = this.projectPathDir+@"\"+this.header.pSrcDir;
+			String dir = (this.latestInteracted==null)?bleh:((this.latestInteracted==this.projectNode)?bleh:Path.GetDirectoryName(this.latestInteracted.Name));
+			if (!(dir.EndsWith(@"\",StringComparison.CurrentCulture)))
+				dir+='\\';
 			CreateFileEditorDialog cfed = new CreateFileEditorDialog (){
 				type=type,
 				dir=dir
@@ -630,19 +666,13 @@ namespace AsmEditor {
 			if (String.IsNullOrEmpty(cfed.fn))
 				return;
 			
-			String cfedFn = null;
-			if (latestInteracted!=null)
-				cfedFn = this.projectPathDir+this.latestInteracted.Name+@"\"+cfed.fn+type;
-			else 
-				cfedFn = cfed.fn;
+			String cfedFn=dir+cfed.fn+type;
 			
 			File.Create(cfedFn).Close();
 			this.loadTabPage(cfedFn);
 			
 			String s = Path.GetFileName(cfedFn);
 			Int32 imageIndex = (s.EndsWith(".asm"))?1:(s.EndsWith(".bat"))?2:4;
-			
-			MessageBox.Show(cfedFn);
 			
 			if (toProject) {
 				
@@ -775,11 +805,10 @@ namespace AsmEditor {
 		}
 		
 		
-		private void GoToToolStripMenuItemClick (Object sender, EventArgs e) {
-			
-			new GoTo(this.fileTabs.SelectedTab.allChildren().Where(x=>x.GetType()==typeof(Scintilla)).First()as Scintilla).ShowGoToDialog();
-			
-		}
+		private void GoToToolStripMenuItemClick (Object sender, EventArgs e) { new GoTo(this.fileTabs.SelectedTab.allChildren().Where(x=>x.GetType()==typeof(Scintilla)).First()as Scintilla).ShowGoToDialog(); }
+		
+		
+		private void CompilerOptionsToolStripMenuItemClick (Object sender, EventArgs e) { new CompilerOptions().Show(); }
 		
 	}
 	

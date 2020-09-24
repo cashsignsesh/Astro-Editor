@@ -75,9 +75,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compiler.cs" />
+    <Compile Include="CompilerOptions.cs" />
+    <Compile Include="CompilerOptions.Designer.cs">
+      <DependentUpon>CompilerOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="CreateFileEditorDialog.cs" />
     <Compile Include="CreateFileEditorDialog.Designer.cs">
       <DependentUpon>CreateFileEditorDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger.cs" />
+    <Compile Include="Debugger.Designer.cs">
+      <DependentUpon>Debugger.cs</DependentUpon>
     </Compile>
     <Compile Include="Editor.cs" />
     <Compile Include="Editor.Designer.cs">
@@ -107,6 +115,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CompilerOptions.resx">
+      <DependentUpon>CompilerOptions.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CreateFileEditorDialog.resx">
       <DependentUpon>CreateFileEditorDialog.cs</DependentUpon>
     </EmbeddedResource>

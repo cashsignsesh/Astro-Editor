@@ -1,0 +1,1 @@
+MsgBox "Invalid compile type!",0,"Astro Editor"

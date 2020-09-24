@@ -264,9 +264,25 @@ namespace AsmEditor {
 			Directory.CreateDirectory(pDir+defPBinDir);
 			Directory.CreateDirectory(pDir+defPSrcDir);
 			
-			data = Encoding.UTF8.GetBytes(@"Yatta yatta yoo
-one day the default hello world asm file will be loaded here
-WHEN I LEARN ASSEMBLY IN THE FIRST PLACE!!!!");//TODO:: Set Hello world app to default asm file
+			data = Encoding.UTF8.GetBytes(";AstroEditor Project by "+Environment.UserName+"\n;"+name+" created "+DateTime.Now+@"
+
+include 'win64ax.inc'
+
+.code
+    
+    ;Sample FASM hello world source
+
+    ;Useful AstroEditor keybinds:
+    ;Ctrl+Scroll to zoom
+    ;Ctrl+F to find/replace
+    ;F5 to debug
+    
+    start:
+        invoke  MessageBox,HWND_DESKTOP,""Hello world"",invoke GetCommandLine,MB_OK
+        invoke  ExitProcess,0
+    
+
+.end start");//TODO:: Set Hello world app to default asm file
 			using (FileStream fs=File.Create(pDir+defPEntryFile))
 				fs.Write(data,0,data.Length);
 			
