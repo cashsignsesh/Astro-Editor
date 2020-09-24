@@ -4,6 +4,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # SharpDevelop 4.4
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsmEditor", "AstroEditor\AsmEditor.csproj", "{EB30EFB1-84D4-4D51-95EA-31F4BB96DA12}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Installer", "Installer\Installer.csproj", "{5871DD39-C507-4457-9386-320A1DC95A2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,5 +16,9 @@ Global
 		{EB30EFB1-84D4-4D51-95EA-31F4BB96DA12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB30EFB1-84D4-4D51-95EA-31F4BB96DA12}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB30EFB1-84D4-4D51-95EA-31F4BB96DA12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5871DD39-C507-4457-9386-320A1DC95A2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5871DD39-C507-4457-9386-320A1DC95A2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5871DD39-C507-4457-9386-320A1DC95A2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5871DD39-C507-4457-9386-320A1DC95A2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 EndGlobal
