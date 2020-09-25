@@ -57,15 +57,16 @@ namespace AsmEditor {
 				catch (IOException) {
 					
 					File.WriteAllLines(MainForm.recentsFile,File.ReadAllLines(MainForm.recentsFile).Where(x=>(!(x.Split('?').First()==s))));
-					Process.Start(Application.ExecutablePath);
 					if (!(doExit)) doExit=true;
 					
 				}
 				
 			}
 			
-			if (doExit)
+			if (doExit) {
+				Process.Start(Application.ExecutablePath);
 				Environment.Exit(0);
+			}
 			
 		}
 		
