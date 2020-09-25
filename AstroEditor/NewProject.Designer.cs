@@ -122,7 +122,7 @@ namespace AsmEditor
 			this.assemblyProjectLbl.Name = "assemblyProjectLbl";
 			this.assemblyProjectLbl.Size = new System.Drawing.Size(117, 15);
 			this.assemblyProjectLbl.TabIndex = 0;
-			this.assemblyProjectLbl.Text = "Assembly project (x86)";
+			this.assemblyProjectLbl.Text = "Assembly project";
 			// 
 			// projectTypesListView
 			// 

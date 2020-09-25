@@ -1,0 +1,6 @@
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\Installer\bin\Debug\Installer.exe.config
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\Installer\bin\Debug\Installer.exe
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\Installer\bin\Debug\Installer.pdb
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\Installer\obj\Debug\Installer.csprojResolveAssemblyReference.cache
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\Installer\obj\Debug\Installer.exe
+C:\Users\Elite\Documents\SharpDevelop Projects\AsmEditor\Astro-Editor\Installer\obj\Debug\Installer.pdb

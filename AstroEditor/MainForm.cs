@@ -48,8 +48,24 @@ namespace AsmEditor {
 			this.recentProjectsList.BorderStyle = BorderStyle.None;
 			
 			this.install();
-			foreach (String s in this.getRecents().Take(8))
-				this.addToList(new Project(s).getHeader().pName,s);
+			
+			Boolean doExit=false;
+			
+			foreach (String s in this.getRecents().Take(8)) {
+				
+				try { this.addToList(new Project(s).getHeader().pName,s); }
+				catch (IOException) {
+					
+					File.WriteAllLines(MainForm.recentsFile,File.ReadAllLines(MainForm.recentsFile).Where(x=>(!(x.Split('?').First()==s))));
+					Process.Start(Application.ExecutablePath);
+					if (!(doExit)) doExit=true;
+					
+				}
+				
+			}
+			
+			if (doExit)
+				Environment.Exit(0);
 			
 		}
 		
@@ -74,7 +90,7 @@ namespace AsmEditor {
 			if (!(File.Exists(MainForm.recentsFile))) {
 				
 				Byte[] data = Encoding.UTF8.GetBytes(@"'The DateTime's here are listed in UTC (for speed&timezone change compatibility).
-'If you are looking for accurate numbers for whatever reason, convert from UTC to your timezone.\n");
+'If you are looking for accurate numbers for whatever reason, convert from UTC to your timezone."+Environment.NewLine);
 				using (FileStream fs = File.Create(MainForm.recentsFile))
 					fs.Write(data,0,data.Length);
 				
