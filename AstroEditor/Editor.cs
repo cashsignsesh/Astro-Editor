@@ -578,7 +578,7 @@ namespace AsmEditor {
 			
 		}
 		
-		private void RunToolStripMenuItemClick (Object sender,EventArgs e) { Process.Start(this.latestInteracted.Name); }
+		private void RunToolStripMenuItemClick (Object sender,EventArgs e) { Process.Start(new ProcessStartInfo(){WorkingDirectory=Path.GetDirectoryName(this.latestInteracted.Name),FileName=this.latestInteracted.Name}); }
 		
 		private void writeAllDescendants (String path,TreeView tv,TreeNode parent,String ext="") {
 			

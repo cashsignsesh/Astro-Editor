@@ -69,6 +69,7 @@ namespace AsmEditor {
 					return retVal;
 				
 				case CompileType.NASM:
+					//TODO:: Load in NASM includes @ compile time
 					File.WriteAllText(compileBatchFile,"(\ncd \""+Compiler.exeDir+"\\include\"\n"+"nasm "+data.nasmArgs+" \""+this.entryFile+"\" -o "+compiledFn+append+"\n)1> \""+this.compileDir+"\\output.txt\" 2>&1");
 					this.compilerProcess=Process.Start(new ProcessStartInfo(){FileName=compileBatchFile,CreateNoWindow=true,UseShellExecute=false,WindowStyle=ProcessWindowStyle.Hidden});
 					return retVal;
