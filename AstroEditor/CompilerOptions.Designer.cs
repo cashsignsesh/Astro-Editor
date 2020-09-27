@@ -37,23 +37,27 @@ namespace AsmEditor
 		private void InitializeComponent()
 		{
 			this.compileTypeGroupBox = new System.Windows.Forms.GroupBox();
+			this.nasmCompileInstruction = new System.Windows.Forms.TextBox();
 			this.fasmRadioBtn = new System.Windows.Forms.RadioButton();
 			this.masmRadioBtn = new System.Windows.Forms.RadioButton();
 			this.nasmRadioBtn = new System.Windows.Forms.RadioButton();
 			this.optionsGroupBox = new System.Windows.Forms.GroupBox();
-			this.linkExeChkBox = new System.Windows.Forms.CheckBox();
-			this.ldExeChkBox = new System.Windows.Forms.CheckBox();
-			this.gccExeChkBox = new System.Windows.Forms.CheckBox();
+			this.optionsInfoLbl1 = new System.Windows.Forms.Label();
+			this.optionsInfoLbl0 = new System.Windows.Forms.Label();
+			this.optionsInfoLbl = new System.Windows.Forms.Label();
+			this.openInstructionsFileBtn = new System.Windows.Forms.Button();
+			this.instructionTextBox = new System.Windows.Forms.TextBox();
+			this.addInstructionBtn = new System.Windows.Forms.Button();
 			this.saveBtn = new System.Windows.Forms.Button();
-			this.linkArgs = new System.Windows.Forms.TextBox();
-			this.ldArgs = new System.Windows.Forms.TextBox();
-			this.gccArgs = new System.Windows.Forms.TextBox();
+			this.compileAsLabel = new System.Windows.Forms.Label();
+			this.compileAsTextBox = new System.Windows.Forms.TextBox();
 			this.compileTypeGroupBox.SuspendLayout();
 			this.optionsGroupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// compileTypeGroupBox
 			// 
+			this.compileTypeGroupBox.Controls.Add(this.nasmCompileInstruction);
 			this.compileTypeGroupBox.Controls.Add(this.fasmRadioBtn);
 			this.compileTypeGroupBox.Controls.Add(this.masmRadioBtn);
 			this.compileTypeGroupBox.Controls.Add(this.nasmRadioBtn);
@@ -64,6 +68,13 @@ namespace AsmEditor
 			this.compileTypeGroupBox.TabStop = false;
 			this.compileTypeGroupBox.Text = "Compile type";
 			// 
+			// nasmCompileInstruction
+			// 
+			this.nasmCompileInstruction.Location = new System.Drawing.Point(66, 22);
+			this.nasmCompileInstruction.Name = "nasmCompileInstruction";
+			this.nasmCompileInstruction.Size = new System.Drawing.Size(77, 20);
+			this.nasmCompileInstruction.TabIndex = 3;
+			// 
 			// fasmRadioBtn
 			// 
 			this.fasmRadioBtn.Location = new System.Drawing.Point(7, 80);
@@ -73,6 +84,7 @@ namespace AsmEditor
 			this.fasmRadioBtn.TabStop = true;
 			this.fasmRadioBtn.Text = "FASM";
 			this.fasmRadioBtn.UseVisualStyleBackColor = true;
+			this.fasmRadioBtn.CheckedChanged += new System.EventHandler(this.handleRbtn);
 			// 
 			// masmRadioBtn
 			// 
@@ -83,6 +95,7 @@ namespace AsmEditor
 			this.masmRadioBtn.TabStop = true;
 			this.masmRadioBtn.Text = "MASM";
 			this.masmRadioBtn.UseVisualStyleBackColor = true;
+			this.masmRadioBtn.CheckedChanged += new System.EventHandler(this.handleRbtn);
 			// 
 			// nasmRadioBtn
 			// 
@@ -93,102 +106,131 @@ namespace AsmEditor
 			this.nasmRadioBtn.TabStop = true;
 			this.nasmRadioBtn.Text = "NASM";
 			this.nasmRadioBtn.UseVisualStyleBackColor = true;
+			this.nasmRadioBtn.CheckedChanged += new System.EventHandler(this.handleRbtn);
 			// 
 			// optionsGroupBox
 			// 
-			this.optionsGroupBox.Controls.Add(this.gccArgs);
-			this.optionsGroupBox.Controls.Add(this.ldArgs);
-			this.optionsGroupBox.Controls.Add(this.linkArgs);
-			this.optionsGroupBox.Controls.Add(this.gccExeChkBox);
-			this.optionsGroupBox.Controls.Add(this.ldExeChkBox);
-			this.optionsGroupBox.Controls.Add(this.linkExeChkBox);
+			this.optionsGroupBox.Controls.Add(this.optionsInfoLbl1);
+			this.optionsGroupBox.Controls.Add(this.optionsInfoLbl0);
+			this.optionsGroupBox.Controls.Add(this.optionsInfoLbl);
+			this.optionsGroupBox.Controls.Add(this.openInstructionsFileBtn);
+			this.optionsGroupBox.Controls.Add(this.instructionTextBox);
+			this.optionsGroupBox.Controls.Add(this.addInstructionBtn);
 			this.optionsGroupBox.Location = new System.Drawing.Point(12, 137);
 			this.optionsGroupBox.Name = "optionsGroupBox";
-			this.optionsGroupBox.Size = new System.Drawing.Size(500, 119);
+			this.optionsGroupBox.Size = new System.Drawing.Size(500, 104);
 			this.optionsGroupBox.TabIndex = 3;
 			this.optionsGroupBox.TabStop = false;
 			this.optionsGroupBox.Text = "Options";
 			// 
-			// linkExeChkBox
+			// optionsInfoLbl1
 			// 
-			this.linkExeChkBox.Location = new System.Drawing.Point(7, 20);
-			this.linkExeChkBox.Name = "linkExeChkBox";
-			this.linkExeChkBox.Size = new System.Drawing.Size(104, 24);
-			this.linkExeChkBox.TabIndex = 0;
-			this.linkExeChkBox.Text = "link.exe";
-			this.linkExeChkBox.UseVisualStyleBackColor = true;
+			this.optionsInfoLbl1.Location = new System.Drawing.Point(7, 52);
+			this.optionsInfoLbl1.Name = "optionsInfoLbl1";
+			this.optionsInfoLbl1.Size = new System.Drawing.Size(487, 16);
+			this.optionsInfoLbl1.TabIndex = 5;
+			this.optionsInfoLbl1.Text = "Example: copy /b %CMPFILE%+C:\\Documents\\toAppend.bin \"%BINDIR%\\result.flp\"";
 			// 
-			// ldExeChkBox
+			// optionsInfoLbl0
 			// 
-			this.ldExeChkBox.Location = new System.Drawing.Point(7, 51);
-			this.ldExeChkBox.Name = "ldExeChkBox";
-			this.ldExeChkBox.Size = new System.Drawing.Size(104, 24);
-			this.ldExeChkBox.TabIndex = 1;
-			this.ldExeChkBox.Text = "ld.exe";
-			this.ldExeChkBox.UseVisualStyleBackColor = true;
+			this.optionsInfoLbl0.Location = new System.Drawing.Point(7, 36);
+			this.optionsInfoLbl0.Name = "optionsInfoLbl0";
+			this.optionsInfoLbl0.Size = new System.Drawing.Size(487, 16);
+			this.optionsInfoLbl0.TabIndex = 4;
+			this.optionsInfoLbl0.Text = "%EXEPATH%=Path to Astro Editor.exe,%BINDIR%=bin dir,%CMPFILE%=Path to compiled fi" +
+			"le";
 			// 
-			// gccExeChkBox
+			// optionsInfoLbl
 			// 
-			this.gccExeChkBox.Location = new System.Drawing.Point(7, 82);
-			this.gccExeChkBox.Name = "gccExeChkBox";
-			this.gccExeChkBox.Size = new System.Drawing.Size(104, 24);
-			this.gccExeChkBox.TabIndex = 2;
-			this.gccExeChkBox.Text = "gcc.exe";
-			this.gccExeChkBox.UseVisualStyleBackColor = true;
+			this.optionsInfoLbl.Location = new System.Drawing.Point(7, 20);
+			this.optionsInfoLbl.Name = "optionsInfoLbl";
+			this.optionsInfoLbl.Size = new System.Drawing.Size(487, 16);
+			this.optionsInfoLbl.TabIndex = 3;
+			this.optionsInfoLbl.Text = "You can add additional batch instructions to your compiler. They will execute aft" +
+			"er compilation.";
+			// 
+			// openInstructionsFileBtn
+			// 
+			this.openInstructionsFileBtn.Location = new System.Drawing.Point(347, 67);
+			this.openInstructionsFileBtn.Name = "openInstructionsFileBtn";
+			this.openInstructionsFileBtn.Size = new System.Drawing.Size(147, 23);
+			this.openInstructionsFileBtn.TabIndex = 2;
+			this.openInstructionsFileBtn.Text = "Open instructions file";
+			this.openInstructionsFileBtn.UseVisualStyleBackColor = true;
+			this.openInstructionsFileBtn.Click += new System.EventHandler(this.OpenInstructionsFileBtnClick);
+			// 
+			// instructionTextBox
+			// 
+			this.instructionTextBox.Location = new System.Drawing.Point(6, 69);
+			this.instructionTextBox.Name = "instructionTextBox";
+			this.instructionTextBox.Size = new System.Drawing.Size(235, 20);
+			this.instructionTextBox.TabIndex = 1;
+			// 
+			// addInstructionBtn
+			// 
+			this.addInstructionBtn.Location = new System.Drawing.Point(247, 67);
+			this.addInstructionBtn.Name = "addInstructionBtn";
+			this.addInstructionBtn.Size = new System.Drawing.Size(94, 23);
+			this.addInstructionBtn.TabIndex = 0;
+			this.addInstructionBtn.Text = "Add instruction";
+			this.addInstructionBtn.UseVisualStyleBackColor = true;
+			this.addInstructionBtn.Click += new System.EventHandler(this.AddInstructionBtnClick);
 			// 
 			// saveBtn
 			// 
-			this.saveBtn.Location = new System.Drawing.Point(437, 262);
+			this.saveBtn.Location = new System.Drawing.Point(437, 248);
 			this.saveBtn.Name = "saveBtn";
 			this.saveBtn.Size = new System.Drawing.Size(75, 23);
 			this.saveBtn.TabIndex = 4;
 			this.saveBtn.Text = "Save";
 			this.saveBtn.UseVisualStyleBackColor = true;
+			this.saveBtn.Click += new System.EventHandler(this.SaveBtnClick);
 			// 
-			// linkArgs
+			// compileAsLabel
 			// 
-			this.linkArgs.Location = new System.Drawing.Point(71, 23);
-			this.linkArgs.Name = "linkArgs";
-			this.linkArgs.Size = new System.Drawing.Size(410, 20);
-			this.linkArgs.TabIndex = 3;
+			this.compileAsLabel.Location = new System.Drawing.Point(12, 249);
+			this.compileAsLabel.Name = "compileAsLabel";
+			this.compileAsLabel.Size = new System.Drawing.Size(66, 17);
+			this.compileAsLabel.TabIndex = 6;
+			this.compileAsLabel.Text = "Compile as";
 			// 
-			// ldArgs
+			// compileAsTextBox
 			// 
-			this.ldArgs.Location = new System.Drawing.Point(71, 53);
-			this.ldArgs.Name = "ldArgs";
-			this.ldArgs.Size = new System.Drawing.Size(410, 20);
-			this.ldArgs.TabIndex = 4;
-			// 
-			// gccArgs
-			// 
-			this.gccArgs.Location = new System.Drawing.Point(71, 84);
-			this.gccArgs.Name = "gccArgs";
-			this.gccArgs.Size = new System.Drawing.Size(410, 20);
-			this.gccArgs.TabIndex = 5;
+			this.compileAsTextBox.Location = new System.Drawing.Point(70, 246);
+			this.compileAsTextBox.Name = "compileAsTextBox";
+			this.compileAsTextBox.Size = new System.Drawing.Size(25, 20);
+			this.compileAsTextBox.TabIndex = 7;
 			// 
 			// CompilerOptions
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(539, 297);
+			this.ClientSize = new System.Drawing.Size(524, 276);
+			this.Controls.Add(this.compileAsTextBox);
 			this.Controls.Add(this.saveBtn);
+			this.Controls.Add(this.compileAsLabel);
 			this.Controls.Add(this.optionsGroupBox);
 			this.Controls.Add(this.compileTypeGroupBox);
 			this.Name = "CompilerOptions";
-			this.Text = "CompilerOptions";
+			this.Text = "Compiler Options";
 			this.Load += new System.EventHandler(this.CompilerOptionsLoad);
 			this.compileTypeGroupBox.ResumeLayout(false);
+			this.compileTypeGroupBox.PerformLayout();
 			this.optionsGroupBox.ResumeLayout(false);
 			this.optionsGroupBox.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 		}
+		private System.Windows.Forms.TextBox compileAsTextBox;
+		private System.Windows.Forms.Label compileAsLabel;
+		private System.Windows.Forms.Label optionsInfoLbl0;
+		private System.Windows.Forms.Label optionsInfoLbl1;
+		private System.Windows.Forms.TextBox nasmCompileInstruction;
+		private System.Windows.Forms.Button addInstructionBtn;
+		private System.Windows.Forms.TextBox instructionTextBox;
+		private System.Windows.Forms.Button openInstructionsFileBtn;
+		private System.Windows.Forms.Label optionsInfoLbl;
 		private System.Windows.Forms.Button saveBtn;
-		private System.Windows.Forms.CheckBox linkExeChkBox;
-		private System.Windows.Forms.CheckBox ldExeChkBox;
-		private System.Windows.Forms.CheckBox gccExeChkBox;
-		private System.Windows.Forms.TextBox linkArgs;
-		private System.Windows.Forms.TextBox ldArgs;
-		private System.Windows.Forms.TextBox gccArgs;
 		private System.Windows.Forms.GroupBox optionsGroupBox;
 		private System.Windows.Forms.RadioButton nasmRadioBtn;
 		private System.Windows.Forms.RadioButton masmRadioBtn;

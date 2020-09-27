@@ -37,6 +37,7 @@ namespace AsmEditor {
 		private readonly String entryFile;
 		private readonly String projectPathDir;
 		private readonly String resourcesDir;
+		private readonly String instructionsFn;
 		
 		private TreeNode projectNode;
 		private TreeNode latestInteracted;
@@ -89,7 +90,8 @@ namespace AsmEditor {
 				this.projectPathDir = Path.GetDirectoryName(this.projectPath);
 				this.project = new Project(this.projectPath);
 				this.header = project.getHeader();
-				this.compiler = new Compiler(this.project,this.projectPathDir,this.settings);
+				this.instructionsFn=Path.GetDirectoryName(this.project.getProjectLocation())+@"\.c_opt";
+				this.compiler = new Compiler(this.project,this.projectPathDir,this.settings,this.instructionsFn);
 				this.fileTabs.TabPages.Clear();
 				this.entryFile = Path.GetDirectoryName(this.projectPath)+'\\'+header.pEntryFile;
 				this.loadTabPage(this.entryFile);
@@ -414,30 +416,10 @@ namespace AsmEditor {
 			
 		}
 		
-		private void debug () {
-			
-			//TODO:: Debugger (auto set ollydbg settings) & autorun
-			String s = this.compile();
-			
-			Task.Factory.StartNew(()=> {
-			
-			    while (!(this.compiler.compilerProcess.HasExited)) Thread.Sleep(100);
-			    Int32 exitCode = this.compiler.compilerProcess.ExitCode;
-			    if (exitCode!=0) {
-			    	this.projectErrors.Text+=File.ReadAllText(this.projectPathDir+'\\'+this.header.pBinDir+"\\output.txt").Split('\n').Reverse().Skip(0).Reverse().merge("\n");
-			    	MessageBox.Show("There was an error with your code. See the project errors textbox. (Exit code: "+exitCode+")");
-			    	return;
-			    }
-			    Process.Start(s);
-			                      	
-			});
-			
-		}
-		
 		
 		private void DebugF5ToolStripMenuItemClick (Object sender, EventArgs e) {
 			
-			this.debug();
+			this.compile(false,true);
 			
 		}
 		
@@ -494,7 +476,7 @@ namespace AsmEditor {
 		
 		private void AddResourceToolStripMenuItem1Click (Object sender,EventArgs e) { this.createResources(); }
 		
-		private String compile (Boolean explorerbit=false) {
+		private void compile (Boolean explorerbit=false,Boolean dbg=false) {
 			
 			this.saveAll();
 			
@@ -502,7 +484,28 @@ namespace AsmEditor {
 				foreach (String s in Directory.GetFiles(this.resourcesDir))
 					File.Copy(s,this.compiler.compileDir+@"\"+Path.GetFileName(s));
 			
-			return this.compiler.compile(explorerbit);
+			String str = this.compiler.compile(explorerbit);
+			
+			Task.Factory.StartNew(()=>{
+			    
+				while (!(this.compiler.compilerProcess.HasExited)) Thread.Sleep(100);
+			    Int32 exitCode = this.compiler.compilerProcess.ExitCode;
+			    String output = File.ReadAllText(this.projectPathDir+'\\'+this.header.pBinDir+"\\output.txt");
+			    
+			    if (output.Contains("error: ")) {
+			    	
+			    	if (this.compiler.compileType==CompileType.FASM)
+			    		this.projectErrors.Text+=output.Split('\n').Reverse().Skip(0).Reverse().merge("\n");
+			    	else if (this.compiler.compileType==CompileType.NASM)
+			    		this.projectErrors.Text+=output;
+			    	MessageBox.Show("There was an error with your code. See the project errors textbox. (Exit code: "+exitCode+")");
+			    	return;
+			    	
+			    } 
+			    
+			    if (dbg)  Process.Start(str);
+			    
+			 });
 			
 		}
 		
@@ -595,7 +598,7 @@ namespace AsmEditor {
 		private void EditorKeyDown (Object sender,System.Windows.Forms.KeyEventArgs e) {
 			
 			if (e.KeyCode==Keys.F5)
-				this.debug();
+				this.compile(false,true);
 			
 			if (!(Keyboard.IsKeyDown(Key.LeftCtrl)))
 					return;
@@ -808,7 +811,7 @@ namespace AsmEditor {
 		private void GoToToolStripMenuItemClick (Object sender, EventArgs e) { new GoTo(this.fileTabs.SelectedTab.allChildren().Where(x=>x.GetType()==typeof(Scintilla)).First()as Scintilla).ShowGoToDialog(); }
 		
 		
-		private void CompilerOptionsToolStripMenuItemClick (Object sender, EventArgs e) { new CompilerOptions().Show(); }
+		private void CompilerOptionsToolStripMenuItemClick (Object sender, EventArgs e) { new CompilerOptions(this.instructionsFn).Show(); }
 		
 	}
 	

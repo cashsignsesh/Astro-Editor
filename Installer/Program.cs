@@ -16,7 +16,7 @@ namespace Installer
 		{
 			Console.WriteLine("Hello World!");
 			
-			// TODO: Implement Functionality Here
+			// TODO:: Make installer
 			
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);

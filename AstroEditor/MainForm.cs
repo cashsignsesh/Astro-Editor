@@ -299,7 +299,7 @@ include 'win64ax.inc'
         invoke  ExitProcess,0
     
 
-.end start");//TODO:: Set Hello world app to default asm file
+.end start");
 			using (FileStream fs=File.Create(pDir+defPEntryFile))
 				fs.Write(data,0,data.Length);
 			
