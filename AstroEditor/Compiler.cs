@@ -57,7 +57,7 @@ namespace AsmEditor {
 			OptData data = OptData.getOptData(File.ReadAllLines(this.instructionsFile));
 			String compiledFn="\""+compileDir+@"\"+header.pName+"."+data.fileExt+"\"",compileBatchFile=this.compileDir+@"\compile.bat",retVal=compiledFn.Substring(1).Remove(compiledFn.Length-2);
 			String append = (explorerBit)?"\nexplorer \""+this.compileDir+'"':"";
-			append+=(data.bonusInstructions.Count()>0)?data.bonusInstructions.Where(x=>(!(String.IsNullOrEmpty(x)))).Select(x=>x.Replace("%EXEPATH%",'"'+Application.ExecutablePath+'"').Replace("%BINDIR%",this.header.pBinDir).Replace("%CMPFILE%",compiledFn)).merge("\n"):"";
+			append+=(data.bonusInstructions.Count()>0)?'\n'+data.bonusInstructions.Where(x=>(!(String.IsNullOrEmpty(x)))).Select(x=>x.Replace("%EXEPATH%",'"'+Application.ExecutablePath+'"').Replace("%BINDIR%",this.compileDir).Replace("%CMPFILE%",compiledFn)).merge("\n"):"";
 			
 			this.compileType=data.compileType;
 			
