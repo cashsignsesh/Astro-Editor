@@ -69,7 +69,7 @@ namespace AsmEditor {
 					return retVal;
 				
 				case CompileType.NASM:
-					//TODO:: Load in NASM includes @ compile time
+					//TODO:: Load in NASM includes @ compile time, this is probably easy, test if setting WorkingDirectory in the ProcessStartInfo to src folder will work.
 					File.WriteAllText(compileBatchFile,"(\ncd \""+Compiler.exeDir+"\\include\"\n"+"nasm "+data.nasmArgs+" \""+this.entryFile+"\" -o "+compiledFn+append+"\n)1> \""+this.compileDir+"\\output.txt\" 2>&1");
 					this.compilerProcess=Process.Start(new ProcessStartInfo(){FileName=compileBatchFile,CreateNoWindow=true,UseShellExecute=false,WindowStyle=ProcessWindowStyle.Hidden});
 					return retVal;
