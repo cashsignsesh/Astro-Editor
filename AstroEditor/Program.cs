@@ -54,11 +54,14 @@ namespace AsmEditor {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			
+			String str = Path.GetDirectoryName(Application.ExecutablePath)+@"\CHK";
+			
+			if (!(File.Exists(Environment.CurrentDirectory+@"\ndisasm.exe"))) goto runInstaller;
+			
 			RegistryKey r = Registry.ClassesRoot.OpenSubKey(".ae");
 			if ((r!=null)&&((r.GetValue("")as String)=="astroeditor.ae"))
 				return;
 			
-			String str = Path.GetDirectoryName(Application.ExecutablePath)+@"\CHK";
 			
 			if (!(new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))) {
 				
@@ -74,6 +77,24 @@ namespace AsmEditor {
 				File.Create(str);
 				Process.Start(new ProcessStartInfo(){FileName=Application.ExecutablePath,Arguments=args.Skip(0).merge(" "),Verb="runas"});
 				Environment.Exit(0);
+				
+			}
+			
+			runInstaller:
+			
+			if (!(Directory.Exists(Environment.CurrentDirectory+@"\INCLUDE\"))) {
+				
+				if (!(File.Exists(Environment.CurrentDirectory+@"\(AstroEditor) Installer.exe"))) {
+					
+					MessageBox.Show("FATAL: No installer found..");
+					Environment.Exit(0);
+					return;
+					
+				}
+				
+				Process.Start(Environment.CurrentDirectory+@"\(AstroEditor) Installer.exe");
+				Environment.Exit(0);
+				return;
 				
 			}
 			

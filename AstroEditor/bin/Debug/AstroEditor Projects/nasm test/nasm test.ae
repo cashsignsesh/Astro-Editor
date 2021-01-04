@@ -1,0 +1,4 @@
+nasm test
+src\main.asm
+src\bin
+src\
